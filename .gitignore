@@ -3,3 +3,6 @@
 ansofra-generator.sh
 /vendor/
 node_modules/
+.env.example 
+.htaccess 
+ansofra-generator.sh
