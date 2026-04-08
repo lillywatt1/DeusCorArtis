@@ -6,3 +6,13 @@ node_modules/
 .htaccess
 ansofra-generator.sh
 Schema/
+Auth/
+Cache/
+Contoller/
+Dto/
+app/
+Files/
+Mail/
+Middleware/
+apis/
+src/
