@@ -53,6 +53,23 @@ elseif($url === $docRoot . $rootDir . $usersArea."/register" || $url === $usersA
 }
 
 
+//usermekiwa endpoints
+elseif($url === $docRoot . $rootDir."/DeusCorArtis" || $url === $docRoot . $rootDir."/DeusCorArtis"."/"){
+    require_once __DIR__ . "/../ansofra/public/deuscorartis.html";
+    exit();
+}
+
+elseif($url === $docRoot . $rootDir."/DeusCorArtisLogin" || $url === $docRoot . $rootDir."/DeusCorArtisLogin"."/"){
+    require_once __DIR__ . "/../ansofra/public/deuscorartislog.html";
+    exit();
+}
+
+elseif($url === $docRoot . $rootDir."/DeusCorArtisRegister" || $url === $docRoot . $rootDir."/DeusCorArtisRegister"."/"){
+    require_once __DIR__ . "/../ansofra/public/deuscorartisreg.html";
+    exit();
+}
+
+
 else{
     require_once __DIR__ . "/.."."$rootDir/public/error/404.html";
     exit();

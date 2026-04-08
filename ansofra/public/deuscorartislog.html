@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login • DeusCorArtis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+        
+        .heading-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), 
+                        url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+    <!-- Main Container -->
+    <div class="min-h-screen flex">
+
+        <!-- Left Side: Artistic Background -->
+        <div class="hidden lg:flex w-1/2 hero-bg flex-col justify-between p-12 relative">
+            <div>
+                <div class="flex items-center gap-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-yellow-600 rounded-2xl flex items-center justify-center text-3xl">✧</div>
+                    <h1 class="heading-font text-4xl tracking-tighter">DeusCorArtis</h1>
+                </div>
+            </div>
+
+            <div class="max-w-md">
+                <h2 class="heading-font text-6xl leading-none mb-6">
+                    Welcome back,<br>Divine Collector
+                </h2>
+                <p class="text-xl text-white/80">
+                    Your sacred collection awaits. 
+                    Log in to continue your journey through divine art.
+                </p>
+            </div>
+
+            <div class="text-sm opacity-70">
+                “Art is the bridge between the divine and the human soul.”<br>
+                <span class="text-amber-400">— Dr. Ifeoma Nwosu, Founder</span>
+            </div>
+        </div>
+
+        <!-- Right Side: Login Form -->
+        <div class="flex-1 flex items-center justify-center p-8 lg:p-16">
+            <div class="w-full max-w-md">
+                
+                <!-- Mobile Logo -->
+                <div class="flex items-center gap-x-3 lg:hidden mb-12">
+                    <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-yellow-600 rounded-2xl flex items-center justify-center text-3xl">✧</div>
+                    <h1 class="heading-font text-4xl tracking-tighter">DeusCorArtis</h1>
+                </div>
+
+                <h2 class="heading-font text-5xl mb-2">Sign In</h2>
+                <p class="text-white/60 mb-10">Enter your credentials to access your divine collection</p>
+
+                <div class="space-y-8">
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest mb-3 text-white/60">Email Address</label>
+                        <input id="email" type="email" 
+                               class="w-full bg-zinc-900 border border-white/20 focus:border-amber-400 rounded-3xl px-8 py-5 outline-none text-lg"
+                               placeholder="you@example.com">
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest mb-3 text-white/60">Password</label>
+                        <div class="relative">
+                            <input id="password" type="password" 
+                                   class="w-full bg-zinc-900 border border-white/20 focus:border-amber-400 rounded-3xl px-8 py-5 outline-none text-lg"
+                                   placeholder="••••••••">
+                            <button onclick="togglePassword()" class="absolute right-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white">
+                                <i id="eye-icon" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember & Forgot -->
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="remember" class="w-5 h-5 accent-amber-400">
+                            <span class="text-sm">Remember me</span>
+                        </label>
+                        <a href="#" onclick="forgotPassword()" class="text-amber-400 hover:underline text-sm">Forgot Password?</a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button onclick="handleLogin()" 
+                            class="w-full py-6 bg-amber-400 hover:bg-amber-300 text-zinc-950 font-semibold rounded-3xl text-xl transition-all active:scale-95">
+                        Sign In
+                    </button>
+
+                    <!-- Divider -->
+                    <div class="relative my-8">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-white/10"></div>
+                        </div>
+                        <div class="relative text-center">
+                            <span class="bg-zinc-950 px-6 text-xs text-white/50">or continue with</span>
+                        </div>
+                    </div>
+
+                    <!-- Social Login -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="socialLogin('Google')" 
+                                class="flex items-center justify-center gap-3 py-5 border border-white/20 hover:border-amber-400 rounded-3xl">
+                            <i class="fa-brands fa-google"></i>
+                            <span>Google</span>
+                        </button>
+                        <button onclick="socialLogin('Apple')" 
+                                class="flex items-center justify-center gap-3 py-5 border border-white/20 hover:border-amber-400 rounded-3xl">
+                            <i class="fa-brands fa-apple"></i>
+                            <span>Apple</span>
+                        </button>
+                    </div>
+
+                    <!-- Register Link -->
+                    <div class="text-center mt-10">
+                        <p class="text-white/60">
+                            Don't have an account yet? 
+                            <a href="DeusCorArtisRegister" class="text-amber-400 hover:underline font-medium">Create Account</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-16 text-center text-xs text-white/40">
+                    © 2026 DeusCorArtis • Abuja, Nigeria
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordField.type = "password";
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Handle Login (Demo)
+        function handleLogin() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!email || !password) {
+                alert("Please enter both email and password.");
+                return;
+            }
+
+            // Demo success message
+            showToast("✅ Login successful! Welcome back to DeusCorArtis.");
+
+            // Redirect to main website after 1.5 seconds
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1500);
+        }
+
+        // Forgot Password
+        function forgotPassword() {
+            const email = prompt("Enter your registered email address:");
+            if (email && email.includes('@')) {
+                showToast("📧 Password reset link has been sent to your email.");
+            } else if (email) {
+                alert("Please enter a valid email address.");
+            }
+        }
+
+        // Social Login
+        function socialLogin(provider) {
+            showToast(`🔗 Signing in with ${provider}...`);
+            
+            setTimeout(() => {
+                showToast(`✅ Successfully signed in with ${provider}!`);
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1200);
+            }, 1400);
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed; 
+                bottom: 30px; 
+                left: 50%; 
+                transform: translateX(-50%);
+                background: #d4af77; 
+                color: #111827; 
+                padding: 16px 32px; 
+                border-radius: 9999px; 
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+                z-index: 9999;
+                font-weight: 500;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.transition = 'all 0.4s';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 20px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // Allow pressing Enter to login
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeusCorArtis • Divine Art for the Soul</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+
+  <style>
+    /* ═══════════════════════════════════════
+       DESIGN TOKENS
+    ═══════════════════════════════════════ */
+    :root {
+      --ink:      #0d0b08;
+      --parchment:#f5efe4;
+      --gold:     #c9a84c;
+      --gold-lt:  #e8ca7a;
+      --gold-dk:  #8a6520;
+      --ash:      #1a1713;
+      --mist:     #2e2921;
+      --text-dim: rgba(245,239,228,0.55);
+      --text-mid: rgba(245,239,228,0.80);
+
+      --font-display: 'Cinzel', serif;
+      --font-body:    'Cormorant Garamond', serif;
+      --font-ui:      'DM Sans', sans-serif;
+
+      --radius-card:  20px;
+      --radius-pill:  999px;
+      --ease-out-expo: cubic-bezier(0.16,1,0.3,1);
+    }
+
+    /* ═══════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink);
+      color: var(--parchment);
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    img { display: block; width: 100%; object-fit: cover; }
+    button { cursor: pointer; background: none; border: none; color: inherit; font-family: inherit; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ═══════════════════════════════════════
+       NOISE TEXTURE OVERLAY
+    ═══════════════════════════════════════ */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ═══════════════════════════════════════
+       TYPOGRAPHY UTILITIES
+    ═══════════════════════════════════════ */
+    .t-display {
+      font-family: var(--font-display);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .t-serif { font-family: var(--font-body); }
+    .t-ui    { font-family: var(--font-ui); }
+    .t-label {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .t-dim { color: var(--text-dim); }
+    .t-mid { color: var(--text-mid); }
+    .t-gold { color: var(--gold); }
+
+    /* ═══════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════ */
+    .container {
+      max-width: 100%;
+      min-width: 100%;
+      margin: 0 auto;
+      padding: 0 30px;
+    }
+    @media (max-width: 768px) {
+      .container { padding:7px; }
+    }
+
+    /* ═══════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: var(--radius-pill);
+      transition: all 0.3s var(--ease-out-expo);
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .btn-gold:hover { background: var(--gold-lt); transform: translateY(-2px); }
+
+    .btn-outline {
+      border: 1px solid rgba(201,168,76,0.5);
+      color: var(--gold);
+    }
+    .btn-outline:hover {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.08);
+    }
+
+    .btn-ghost {
+      border: 1px solid rgba(245,239,228,0.2);
+      color: var(--parchment);
+    }
+    .btn-ghost:hover {
+      border-color: rgba(245,239,228,0.5);
+      background: rgba(245,239,228,0.05);
+    }
+
+    /* ═══════════════════════════════════════
+       GOLD DIVIDER
+    ═══════════════════════════════════════ */
+    .gold-rule {
+      width: 48px; height: 1px;
+      background: var(--gold);
+      display: inline-block;
+    }
+
+    /* ═══════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════ */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      padding: 0 48px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s, backdrop-filter 0.4s, border-color 0.4s;
+      border-bottom: 1px solid transparent;
+    }
+    #nav.scrolled {
+      background: rgba(13,11,8,0.92);
+      backdrop-filter: blur(20px);
+      border-color: rgba(201,168,76,0.15);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-logo-mark {
+      width: 36px; height: 36px;
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--gold);
+    }
+    .nav-logo-text {
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 0.12em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--parchment); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .nav-icon-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(245,239,228,0.15);
+      font-size: 14px;
+      color: var(--text-mid);
+      transition: all 0.25s;
+      position: relative;
+    }
+    .nav-icon-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px; right: -5px;
+      background: var(--gold);
+      color: var(--ink);
+      font-family: var(--font-ui);
+      font-size: 9px;
+      font-weight: 700;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Mobile hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      width: 40px; height: 40px;
+      align-items: center;
+      justify-content: center;
+    }
+    .hamburger span {
+      width: 22px; height: 1px;
+      background: var(--parchment);
+      transition: all 0.3s;
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+    /* Mobile menu */
+    #mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 490;
+      background: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      transform: translateY(-100%);
+      transition: transform 0.5s var(--ease-out-expo);
+    }
+    #mobile-menu.open { transform: translateY(0); }
+    #mobile-menu a {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 6vw, 48px);
+      letter-spacing: 0.1em;
+      color: var(--text-mid);
+      transition: color 0.2s;
+    }
+    #mobile-menu a:hover { color: var(--gold); }
+
+    @media (max-width: 960px) {
+      #nav { padding: 0 7px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ═══════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════ */
+    #hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('https://picsum.photos/id/1039/2000/1200') center/cover no-repeat;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(13,11,8,0.2) 0%,
+        rgba(13,11,8,0.3) 40%,
+        rgba(13,11,8,0.85) 75%,
+        rgba(13,11,8,1) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 48px 96px;
+      max-width: 1440px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(52px, 8vw, 120px);
+      line-height: 0.92;
+      letter-spacing: 0.04em;
+      font-weight: 900;
+      margin-bottom: 32px;
+    }
+    .hero-title em {
+      font-style: italic;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 0.85em;
+      display: block;
+      color: var(--gold-lt);
+      letter-spacing: 0.08em;
+    }
+
+    .hero-sub {
+      font-size: clamp(18px, 2vw, 24px);
+      color: var(--text-mid);
+      max-width: 540px;
+      margin-bottom: 48px;
+      font-weight: 300;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .hero-stats {
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(245,239,228,0.12);
+      display: flex;
+      gap: 64px;
+    }
+    .hero-stat-num {
+      font-family: var(--font-display);
+      font-size: 36px;
+      color: var(--gold);
+      display: block;
+    }
+    .hero-stat-label {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 768px) {
+      .hero-content { padding: 0 24px 80px; }
+      .hero-stats { gap: 32px; flex-wrap: wrap; }
+    }
+
+    /* ═══════════════════════════════════════
+       MARQUEE
+    ═══════════════════════════════════════ */
+    .marquee-bar {
+      background: var(--gold);
+      color: var(--ink);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-track {
+      display: inline-flex;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 24px;
+      padding: 0 40px;
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .marquee-dot {
+      width: 2px; height: 2px;
+      border-radius: 50%;
+      background: var(--ink);
+      opacity: 0.4;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ═══════════════════════════════════════
+       SECTION HEADERS
+    ═══════════════════════════════════════ */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 64px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 56px);
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+    }
+    .section-title em {
+      display: block;
+      font-family: var(--font-body);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 0.65em;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+    @media (max-width: 768px) {
+      .section-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+    }
+
+    /* ═══════════════════════════════════════
+       SHOP SECTION
+    ═══════════════════════════════════════ */
+    #shop { padding: 120px 0; }
+
+    /* Filter bar */
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-pill {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(245,239,228,0.18);
+      color: var(--text-dim);
+      transition: all 0.25s;
+    }
+    .filter-pill:hover, .filter-pill.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201,168,76,0.07);
+    }
+    .filter-search {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--ash);
+      border: 1px solid rgba(245,239,228,0.12);
+      border-radius: var(--radius-pill);
+      padding: 10px 20px;
+      transition: border-color 0.25s;
+    }
+    .filter-search:focus-within { border-color: var(--gold); }
+    .filter-search i { color: var(--text-dim); font-size: 13px; }
+    .filter-search input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--parchment);
+      font-family: var(--font-ui);
+      font-size: 13px;
+      width: 200px;
+    }
+    .filter-search input::placeholder { color: var(--text-dim); }
+
+    /* Art Grid */
+    #art-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+    @media (max-width: 1200px) { #art-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px)  { #art-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px)  { #art-grid { grid-template-columns: 1fr; } }
+
+    /* Art Card */
+    .art-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--ash);
+      aspect-ratio: 3/4;
+    }
+    .art-card-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s var(--ease-out-expo);
+    }
+    .art-card:hover .art-card-img { transform: scale(1.07); }
+
+    .art-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,11,8,0.95) 0%, rgba(13,11,8,0.4) 45%, transparent 70%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+      transition: opacity 0.3s;
+    }
+    .art-card-cat {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .art-card-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: 0.06em;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .art-card-artist {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+    }
+    .art-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .art-card-price {
+      font-family: var(--font-display);
+      font-size: 16px;
+      letter-spacing: 0.06em;
+    }
+    .art-card-btn {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      border-radius: var(--radius-pill);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.3s var(--ease-out-expo);
+    }
+    .art-card:hover .art-card-btn {
+      opacity: 1;
+      transform: translateY(0);
+      background: var(--gold);
+      color: var(--ink);
+    }
+    .art-card-empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 80px 0;
+      font-family: var(--font-body);
+      font-style: italic;
+      color: var(--text-dim);
+      font-size: 22px;
+    }
+
+    /* ═══════════════════════════════════════
+       READ THE ART SECTION
+    ═══════════════════════════════════════ */
+    #read {
+      background: var(--ash);
+      padding: 120px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    #read::before {
+      content: 'READ';
+      position: absolute;
+      top: 40px; right: -20px;
+      font-family: var(--font-display);
+      font-size: 260px;
+      color: rgba(201,168,76,0.03);
+      letter-spacing: -0.02em;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .stories-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 2px;
+    }
+    @media (max-width: 900px) { .stories-grid { grid-template-columns: 1fr; } }
+
+    .story-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .story-card:first-child { grid-row: span 2; }
+    @media (max-width: 900px) { .story-card:first-child { grid-row: span 1; } }
+
+    .story-card-img {
+      width: 100%;
+      height: 100%;
+      min-height: 300px;
+      object-fit: cover;
+      transition: transform 0.7s var(--ease-out-expo);
+      display: block;
+    }
+    .story-card:first-child .story-card-img { min-height: 620px; }
+    @media (max-width: 900px) {
+      .story-card:first-child .story-card-img { min-height: 300px; }
+    }
+
+    .story-card:hover .story-card-img { transform: scale(1.05); }
+
+    .story-card-layer {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,11,8,0.92) 0%, rgba(13,11,8,0.3) 55%, transparent 80%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 36px;
+      transition: background 0.4s;
+    }
+    .story-card:hover .story-card-layer {
+      background: linear-gradient(to top, rgba(13,11,8,0.96) 0%, rgba(13,11,8,0.6) 60%, rgba(13,11,8,0.2) 100%);
+    }
+
+    .story-card-tag {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .story-card-title {
+      font-family: var(--font-display);
+      font-size: clamp(16px, 2vw, 24px);
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .story-card-excerpt {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 15px;
+      color: var(--text-dim);
+      max-width: 480px;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.35s var(--ease-out-expo);
+    }
+    .story-card:hover .story-card-excerpt { opacity: 1; transform: translateY(0); }
+    .story-card-read {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .story-card-read i { transition: transform 0.25s; }
+    .story-card:hover .story-card-read i { transform: translateX(4px); }
+
+    /* ═══════════════════════════════════════
+       ARTISTS SECTION
+    ═══════════════════════════════════════ */
+    #artists { padding: 120px 0; }
+
+    .artists-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+    @media (max-width: 1000px) { .artists-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px)  { .artists-grid { grid-template-columns: 1fr; } }
+
+    .artist-card {
+      position: relative;
+      cursor: pointer;
+      group: true;
+    }
+    .artist-img-wrap {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-card);
+      aspect-ratio: 3/4;
+      margin-bottom: 24px;
+    }
+    .artist-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease-out-expo);
+      filter: grayscale(20%);
+    }
+    .artist-card:hover .artist-img-wrap img {
+      transform: scale(1.06);
+      filter: grayscale(0%);
+    }
+    .artist-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,11,8,0.85) 0%, transparent 50%);
+      border-radius: var(--radius-card);
+    }
+    .artist-img-num {
+      position: absolute;
+      top: 20px; left: 20px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+    .artist-img-btn {
+      position: absolute;
+      bottom: 20px; right: 20px;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      font-size: 13px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s var(--ease-out-expo);
+    }
+    .artist-card:hover .artist-img-btn { opacity: 1; transform: scale(1); }
+
+    .artist-name {
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .artist-spec {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 15px;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .artist-desc {
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════
+       ABOUT / MANIFESTO
+    ═══════════════════════════════════════ */
+    #about {
+      background: var(--parchment);
+      color: var(--ink);
+      padding: 120px 0;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-wrap img {
+      border-radius: var(--radius-card);
+      aspect-ratio: 4/5;
+      object-fit: cover;
+    }
+    .about-img-badge {
+      position: absolute;
+      bottom: -24px; right: -24px;
+      width: 140px; height: 140px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      text-align: center;
+    }
+    .about-img-badge .num {
+      font-family: var(--font-display);
+      font-size: 40px;
+      line-height: 1;
+    }
+    .about-img-badge .lbl {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    @media (max-width: 768px) { .about-img-badge { right: 8px; bottom: -16px; width: 110px; height: 110px; } }
+
+    .about-eyebrow { color: var(--gold-dk); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .about-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 52px);
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+    .about-title em {
+      display: block;
+      font-family: var(--font-body);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--gold-dk);
+    }
+    .about-text { font-size: 18px; color: rgba(13,11,8,0.7); line-height: 1.8; margin-bottom: 24px; }
+
+    .about-quote {
+      border-left: 2px solid var(--gold);
+      padding-left: 28px;
+      margin: 40px 0;
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 22px;
+      color: rgba(13,11,8,0.8);
+      line-height: 1.6;
+    }
+    .about-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 48px;
+    }
+    .about-stat-num {
+      font-family: var(--font-display);
+      font-size: 40px;
+      color: var(--gold-dk);
+      display: block;
+    }
+    .about-stat-lbl {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(13,11,8,0.5);
+    }
+
+    /* ═══════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════ */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      padding: 80px 0 48px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr) 1fr;
+      gap: 48px;
+      margin-bottom: 64px;
+    }
+    @media (max-width: 960px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+    .footer-brand p { font-size: 15px; color: var(--text-dim); margin-top: 16px; line-height: 1.8; }
+    .footer-col h5 {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 15px;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--parchment); }
+    .footer-bottom {
+      border-top: 1px solid rgba(245,239,228,0.08);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-bottom p {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .footer-pay { display: flex; gap: 16px; font-size: 26px; color: var(--text-dim); }
+
+    /* ═══════════════════════════════════════
+       PRODUCT MODAL
+    ═══════════════════════════════════════ */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(13,11,8,0.92);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s;
+      backdrop-filter: blur(6px);
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      background: var(--ash);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 24px;
+      overflow: hidden;
+      max-width: 900px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      transform: translateY(30px) scale(0.97);
+      transition: transform 0.4s var(--ease-out-expo);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-backdrop.open .modal-box { transform: translateY(0) scale(1); }
+    @media (max-width: 700px) { .modal-box { grid-template-columns: 1fr; } }
+
+    .modal-img { aspect-ratio: 1; overflow: hidden; }
+    .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .modal-info { padding: 48px 40px; display: flex; flex-direction: column; }
+    .modal-close {
+      align-self: flex-end;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(245,239,228,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--text-dim);
+      transition: all 0.2s;
+      margin-bottom: 28px;
+    }
+    .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+
+    .modal-cat { font-family: var(--font-ui); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+    .modal-title-text { font-family: var(--font-display); font-size: 32px; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .modal-artist-name { font-family: var(--font-body); font-style: italic; font-size: 16px; color: var(--text-dim); margin-bottom: 28px; }
+    .modal-divider { height: 1px; background: rgba(245,239,228,0.1); margin: 0 0 28px; }
+    .modal-desc { font-size: 16px; color: var(--text-mid); line-height: 1.8; flex: 1; }
+    .modal-footer { margin-top: 36px; }
+    .modal-price-label { font-family: var(--font-ui); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); }
+    .modal-price-val { font-family: var(--font-display); font-size: 30px; color: var(--gold); margin-bottom: 20px; display: block; }
+    .modal-add-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--gold);
+      color: var(--ink);
+      border-radius: var(--radius-pill);
+      font-family: var(--font-ui);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .modal-add-btn:hover { background: var(--gold-lt); transform: translateY(-2px); }
+    .modal-notes { font-family: var(--font-ui); font-size: 11px; color: var(--text-dim); margin-top: 16px; text-align: center; letter-spacing: 0.05em; }
+
+    /* ═══════════════════════════════════════
+       CART DRAWER
+    ═══════════════════════════════════════ */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(13,11,8,0.7);
+      z-index: 800;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s;
+      backdrop-filter: blur(4px);
+    }
+    .drawer-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0; right: 0;
+      height: 100%;
+      width: min(480px, 100vw);
+      background: var(--ash);
+      border-left: 1px solid rgba(201,168,76,0.15);
+      z-index: 810;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.45s var(--ease-out-expo);
+    }
+    .drawer-backdrop.open + .cart-drawer { transform: translateX(0); }
+    /* Alternative: toggle class directly on cart-drawer */
+    .cart-drawer.open { transform: translateX(0); }
+
+    .cart-head {
+      padding: 32px;
+      border-bottom: 1px solid rgba(245,239,228,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-head h3 { font-family: var(--font-display); font-size: 22px; letter-spacing: 0.08em; }
+    .cart-head-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(245,239,228,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim);
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    .cart-head-close:hover { border-color: var(--gold); color: var(--gold); }
+
+    .cart-body { flex: 1; overflow-y: auto; padding: 24px 32px; }
+
+    .cart-empty {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 16px;
+      padding: 48px 0;
+    }
+    .cart-empty i { font-size: 56px; color: rgba(245,239,228,0.1); }
+    .cart-empty p { font-family: var(--font-body); font-style: italic; color: var(--text-dim); font-size: 18px; }
+
+    .cart-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(245,239,228,0.07);
+    }
+    .cart-item-img {
+      width: 80px; height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-title { font-family: var(--font-display); font-size: 14px; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .cart-item-artist { font-family: var(--font-body); font-style: italic; font-size: 13px; color: var(--text-dim); margin-bottom: 12px; }
+    .cart-item-row { display: flex; align-items: center; justify-content: space-between; }
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1px solid rgba(245,239,228,0.2);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+    .qty-btn {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      color: var(--text-mid);
+      transition: all 0.2s;
+    }
+    .qty-btn:hover { color: var(--gold); }
+    .qty-val { font-family: var(--font-ui); font-size: 13px; padding: 0 12px; }
+    .cart-item-price { font-family: var(--font-display); font-size: 15px; letter-spacing: 0.06em; }
+    .cart-item-remove { font-family: var(--font-ui); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,80,80,0.6); transition: color 0.2s; margin-top: 8px; display: inline-block; }
+    .cart-item-remove:hover { color: rgba(255,80,80,1); }
+
+    .cart-foot { padding: 24px 32px; border-top: 1px solid rgba(245,239,228,0.08); }
+    .cart-subtotal { display: flex; justify-content: space-between; margin-bottom: 20px; }
+    .cart-subtotal span { font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+    .cart-subtotal strong { font-family: var(--font-display); font-size: 22px; color: var(--gold); }
+    .cart-checkout-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--gold);
+      color: var(--ink);
+      border-radius: var(--radius-pill);
+      font-family: var(--font-ui);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .cart-checkout-btn:hover { background: var(--gold-lt); }
+
+    /* ═══════════════════════════════════════
+       LOGIN MODAL
+    ═══════════════════════════════════════ */
+    #login-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(13,11,8,0.88);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(8px);
+    }
+    #login-modal.open { opacity: 1; pointer-events: all; }
+
+    .login-box {
+      background: var(--ash);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 24px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 460px;
+      transform: translateY(20px);
+      transition: transform 0.4s var(--ease-out-expo);
+    }
+    #login-modal.open .login-box { transform: translateY(0); }
+
+    .login-head {
+      padding: 32px 36px 24px;
+      border-bottom: 1px solid rgba(245,239,228,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .login-head h2 { font-family: var(--font-display); font-size: 24px; letter-spacing: 0.08em; }
+    .login-close {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(245,239,228,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      color: var(--text-dim);
+      transition: all 0.2s;
+    }
+    .login-close:hover { border-color: var(--gold); color: var(--gold); }
+
+    .login-tabs { display: flex; border-bottom: 1px solid rgba(245,239,228,0.08); }
+    .login-tab {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      font-family: var(--font-ui);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border-bottom: 2px solid transparent;
+      transition: all 0.25s;
+      margin-bottom: -1px;
+    }
+    .login-tab.active { color: var(--gold); border-color: var(--gold); }
+
+    .login-body { padding: 32px 36px; }
+
+    .field { margin-bottom: 20px; }
+    .field label {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+    .field input {
+      width: 100%;
+      background: var(--mist);
+      border: 1px solid rgba(245,239,228,0.12);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: var(--parchment);
+      font-family: var(--font-body);
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.25s;
+    }
+    .field input:focus { border-color: var(--gold); }
+    .field input::placeholder { color: rgba(245,239,228,0.25); }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .form-submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--gold);
+      color: var(--ink);
+      border-radius: var(--radius-pill);
+      font-family: var(--font-ui);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .form-submit:hover { background: var(--gold-lt); }
+
+    .form-switch {
+      text-align: center;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 16px;
+    }
+    .form-switch span { color: var(--gold); cursor: pointer; }
+    .form-switch span:hover { text-decoration: underline; }
+
+    .social-sep {
+      position: relative;
+      text-align: center;
+      margin: 24px 0;
+    }
+    .social-sep::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0;
+      width: 100%; height: 1px;
+      background: rgba(245,239,228,0.1);
+    }
+    .social-sep span {
+      position: relative;
+      background: var(--ash);
+      padding: 0 14px;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .social-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .social-btn {
+      padding: 13px;
+      border: 1px solid rgba(245,239,228,0.15);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      color: var(--text-mid);
+      transition: all 0.25s;
+    }
+    .social-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ═══════════════════════════════════════
+       STORY MODAL
+    ═══════════════════════════════════════ */
+    .story-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(13,11,8,0.92);
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(8px);
+    }
+    .story-modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .story-modal-box {
+      background: var(--ash);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 24px;
+      overflow: hidden;
+      max-width: 680px;
+      width: 100%;
+      transform: translateY(20px);
+      transition: transform 0.4s var(--ease-out-expo);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .story-modal-backdrop.open .story-modal-box { transform: translateY(0); }
+
+    .story-modal-img { width: 100%; aspect-ratio: 16/7; object-fit: cover; }
+    .story-modal-body { padding: 40px 48px; }
+    @media (max-width: 560px) { .story-modal-body { padding: 28px 24px; } }
+    .story-modal-tag { font-family: var(--font-ui); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+    .story-modal-title { font-family: var(--font-display); font-size: 30px; letter-spacing: 0.06em; margin-bottom: 24px; }
+    .story-modal-text { font-size: 18px; color: var(--text-mid); line-height: 1.85; }
+    .story-modal-close-btn {
+      margin-top: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-ui);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.4);
+      padding: 12px 28px;
+      border-radius: var(--radius-pill);
+      transition: all 0.25s;
+    }
+    .story-modal-close-btn:hover { background: rgba(201,168,76,0.1); }
+
+    /* ═══════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════ */
+    #toast-container {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      z-index: 9000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .toast {
+      background: var(--ash);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--parchment);
+      padding: 14px 22px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-ui);
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: toastIn 0.4s var(--ease-out-expo);
+      max-width: 340px;
+    }
+    .toast i { color: var(--gold); }
+    .toast.out { animation: toastOut 0.35s ease forwards; }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to   { opacity: 0; transform: translateY(16px) scale(0.95); }
+    }
+
+    /* ═══════════════════════════════════════
+       SCROLL ANIMATIONS
+    ═══════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ═══════════════════════════════════════
+       SCROLLBAR
+    ═══════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--ink); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dk); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════ NAVIGATION ═══════════════ -->
+  <nav id="nav">
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-mark">✦</div>
+      <span class="nav-logo-text">DeusCorArtis</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#shop">Collection</a>
+      <a href="#read">Read the Art</a>
+      <a href="#artists">Artists</a>
+      <a href="#about">Our Story</a>
+    </div>
+
+    <div class="nav-actions">
+      <button class="nav-icon-btn" onclick="openLogin()" title="Account">
+        <i class="fa-regular fa-user"></i>
+      </button>
+      <button class="nav-icon-btn" onclick="openCart()" title="Cart">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="cart-badge" id="cart-count">0</span>
+      </button>
+      <button class="hamburger" id="hamburger" onclick="toggleMobile()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu">
+    <a href="#shop"    onclick="closeMobile()">Collection</a>
+    <a href="#read"    onclick="closeMobile()">Read the Art</a>
+    <a href="#artists" onclick="closeMobile()">Artists</a>
+    <a href="#about"   onclick="closeMobile()">Our Story</a>
+  </div>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="gold-rule"></span>
+        <span class="t-label">Est 2026 · Abuja, Nigeria</span>
+      </div>
+
+      <h1 class="hero-title">
+        Deus Cor<br>
+        <em>Artis</em>
+      </h1>
+
+      <p class="hero-sub">
+        Where the heart of the divine meets the soul of art.
+        Read the stories. Own the masterpieces.
+      </p>
+
+      <div class="hero-cta">
+        <a href="#shop" class="btn btn-gold">
+          Browse Collection <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <a href="#read" class="btn btn-ghost">Read the Art</a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <span class="hero-stat-num">42</span>
+          <span class="hero-stat-label">Masterpieces</span>
+        </div>
+        <div>
+          <span class="hero-stat-num">18</span>
+          <span class="hero-stat-label">Living Artists</span>
+        </div>
+        <div>
+          <span class="hero-stat-num">7</span>
+          <span class="hero-stat-label">Countries Shipped</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ MARQUEE ═══════════════ -->
+  <div class="marquee-bar">
+    <div class="marquee-track" id="marquee-track">
+      <!-- JS fills -->
+    </div>
+  </div>
+
+  <!-- ═══════════════ SHOP ═══════════════ -->
+  <section id="shop">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <p class="t-label" style="margin-bottom:16px;">The Collection</p>
+          <h2 class="section-title">
+            Divine<br><em>Artworks</em>
+          </h2>
+        </div>
+        <p class="t-mid" style="max-width:320px; text-align:right; font-style:italic; font-size:18px;">
+          Curated originals, each carrying a story worth more than the canvas.
+        </p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar reveal">
+        <button class="filter-pill active" data-cat="all" onclick="setFilter(this,'all')">All Works</button>
+        <button class="filter-pill" data-cat="oil" onclick="setFilter(this,'oil')">Oil on Canvas</button>
+        <button class="filter-pill" data-cat="acrylic" onclick="setFilter(this,'acrylic')">Acrylic</button>
+        <button class="filter-pill" data-cat="digital" onclick="setFilter(this,'digital')">Digital Divine</button>
+        <button class="filter-pill" data-cat="sculpture" onclick="setFilter(this,'sculpture')">Sculpture</button>
+        <div class="filter-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-input" placeholder="Search by title or artist…" onkeyup="filterArt()">
+        </div>
+      </div>
+
+      <div id="art-grid"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ READ THE ART ═══════════════ -->
+  <section id="read">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <p class="t-label" style="margin-bottom:16px;">Beyond the Canvas</p>
+          <h2 class="section-title">
+            Read the<br><em>Soul of Each Piece</em>
+          </h2>
+        </div>
+        <p class="t-mid" style="max-width:300px; text-align:right; font-style:italic; font-size:18px;">
+          Every artwork holds a divine story. Read before you own.
+        </p>
+      </div>
+
+      <div class="stories-grid reveal" id="stories-grid"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ ARTISTS ═══════════════ -->
+  <section id="artists">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <p class="t-label" style="margin-bottom:16px;">The Creators</p>
+          <h2 class="section-title">
+            Divine<br><em>Hands at Work</em>
+          </h2>
+        </div>
+      </div>
+
+      <div class="artists-grid" id="artists-grid"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ ABOUT ═══════════════ -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="about-img-wrap">
+            <img src="https://picsum.photos/id/1039/800/1000" alt="Studio">
+            <div class="about-img-badge">
+              <span class="num">2026</span>
+              <span class="lbl">Founded</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="about-eyebrow">
+            <span class="gold-rule" style="background:var(--gold-dk)"></span>
+            <span class="t-label" style="color:var(--gold-dk)">Our Manifesto</span>
+          </div>
+
+          <h2 class="about-title">
+            The Heart of God.<br>
+            <em>The Soul of Art.</em>
+          </h2>
+
+          <p class="about-text">
+            DeusCorArtis was born in Abuja with one mission: to connect collectors with artworks that carry divine stories. Every piece is hand-selected, every story written by the artist themselves.
+          </p>
+
+          <blockquote class="about-quote">
+            "Art is not decoration. It is a conversation with the divine."
+            <footer style="font-size:14px; margin-top:16px; font-style:normal; opacity:0.6;">— Dr. Ifeoma Nwosu, Founder</footer>
+          </blockquote>
+
+          <div class="about-stats">
+            <div>
+              <span class="about-stat-num">42</span>
+              <span class="about-stat-lbl">Masterpieces</span>
+            </div>
+            <div>
+              <span class="about-stat-num">18</span>
+              <span class="about-stat-lbl">Artists</span>
+            </div>
+            <div>
+              <span class="about-stat-num">7</span>
+              <span class="about-stat-lbl">Countries</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo" style="margin-bottom:0">
+            <div class="nav-logo-mark">✦</div>
+            <span class="nav-logo-text">DeusCorArtis</span>
+          </div>
+          <p>Abuja, Nigeria<br>Where art meets eternity.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Shop</h5>
+          <a href="#shop">New Arrivals</a>
+          <a href="#shop">Original Paintings</a>
+          <a href="#shop">Sculptures</a>
+          <a href="#shop">Digital Editions</a>
+        </div>
+        <div class="footer-col">
+          <h5>Read</h5>
+          <a href="#read">Artist Stories</a>
+          <a href="#read">Behind the Brush</a>
+          <a href="#read">The Divine Collection</a>
+        </div>
+        <div class="footer-col">
+          <h5>Connect</h5>
+          <a href="#">Instagram</a>
+          <a href="#">WhatsApp +234 803 123 4567</a>
+          <a href="#">hello@deuscorartis.com</a>
+        </div>
+        <div class="footer-col">
+          <h5>Secure Checkout</h5>
+          <div class="footer-pay">
+            <i class="fa-brands fa-cc-visa"></i>
+            <i class="fa-brands fa-cc-mastercard"></i>
+            <i class="fa-brands fa-paypal"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 DeusCorArtis · All Rights Reserved</p>
+        <p>Designed in Abuja · Built for Eternity</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════ PRODUCT MODAL ═══════════════ -->
+  <div class="modal-backdrop" id="product-modal" onclick="if(event.target===this)closeProductModal()">
+    <div class="modal-box">
+      <div class="modal-img" id="modal-img"></div>
+      <div class="modal-info">
+        <button class="modal-close" onclick="closeProductModal()">✕</button>
+        <div class="modal-cat" id="modal-cat"></div>
+        <h2 class="modal-title-text" id="modal-title-text"></h2>
+        <div class="modal-artist-name" id="modal-artist-name"></div>
+        <div class="modal-divider"></div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="modal-footer">
+          <div class="modal-price-label">Price</div>
+          <span class="modal-price-val" id="modal-price-val"></span>
+          <button class="modal-add-btn" onclick="addCurrentToCart()">
+            <i class="fa-solid fa-bag-shopping"></i> Add to Cart
+          </button>
+          <p class="modal-notes">Free shipping · Authenticity certificate · 30-day return</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CART DRAWER ═══════════════ -->
+  <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-head">
+      <h3>Your Cart</h3>
+      <button class="cart-head-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-body" id="cart-body"></div>
+    <div class="cart-foot" id="cart-foot" style="display:none">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <strong id="cart-total">₦0</strong>
+      </div>
+      <button class="cart-checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ LOGIN MODAL ═══════════════ -->
+  <div id="login-modal" onclick="if(event.target===this)closeLogin()">
+    <div class="login-box">
+      <div class="login-head">
+        <h2 id="login-title">Welcome Back</h2>
+        <button class="login-close" onclick="closeLogin()">✕</button>
+      </div>
+      <div class="login-tabs">
+        <button class="login-tab active" id="tab-0" onclick="switchTab(0)">Sign In</button>
+        <button class="login-tab" id="tab-1" onclick="switchTab(1)">Create Account</button>
+      </div>
+
+      <!-- Login Form -->
+      <div class="login-body" id="form-login">
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" id="login-email" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="••••••••">
+        </div>
+        <button class="form-submit" onclick="handleLogin()">Sign In</button>
+        <p class="form-switch">No account? <span onclick="switchTab(1)">Create one now</span></p>
+        <div class="social-sep"><span>or continue with</span></div>
+        <div class="social-btns">
+          <button class="social-btn" onclick="socialLogin('Google')"><i class="fa-brands fa-google"></i> Google</button>
+          <button class="social-btn" onclick="socialLogin('Apple')"><i class="fa-brands fa-apple"></i> Apple</button>
+        </div>
+      </div>
+
+      <!-- Signup Form -->
+      <div class="login-body" id="form-signup" style="display:none">
+        <div class="field-row">
+          <div class="field">
+            <label>First Name</label>
+            <input type="text" id="signup-first" placeholder="Amaka">
+          </div>
+          <div class="field">
+            <label>Last Name</label>
+            <input type="text" id="signup-last" placeholder="Osei">
+          </div>
+        </div>
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" id="signup-email" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="signup-pass" placeholder="Create a strong password">
+        </div>
+        <button class="form-submit" onclick="handleSignup()">Create Account</button>
+        <p class="form-switch">Already have an account? <span onclick="switchTab(0)">Sign in</span></p>
+        <div class="social-sep"><span>or sign up with</span></div>
+        <div class="social-btns">
+          <button class="social-btn" onclick="socialLogin('Google')"><i class="fa-brands fa-google"></i> Google</button>
+          <button class="social-btn" onclick="socialLogin('Apple')"><i class="fa-brands fa-apple"></i> Apple</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ STORY MODAL ═══════════════ -->
+  <div class="story-modal-backdrop" id="story-modal" onclick="if(event.target===this)closeStory()">
+    <div class="story-modal-box">
+      <img class="story-modal-img" id="story-img" src="" alt="">
+      <div class="story-modal-body">
+        <div class="story-modal-tag" id="story-tag"></div>
+        <h2 class="story-modal-title" id="story-title-text"></h2>
+        <p class="story-modal-text" id="story-text"></p>
+        <button class="story-modal-close-btn" onclick="closeStory()">
+          <i class="fa-solid fa-arrow-left"></i> Close Story
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+  <script>
+    /* ═══════════════════════════════════
+       DATA
+    ═══════════════════════════════════ */
+    const artworks = [
+      { id:1, title:"Eternal Flame",        artist:"Adebayo Olumide",   category:"oil",       price:1250000, image:"https://picsum.photos/id/1015/800/800", description:"A breathtaking oil painting capturing the sacred fire that burns within every soul. Gold leaf accents were applied by hand in the artist's studio in Abuja. This piece took 7 months to complete and carries a personal blessing from the artist." },
+      { id:2, title:"Whispers of the Cosmos", artist:"Fatima Nkemdilim", category:"acrylic",   price:850000,  image:"https://picsum.photos/id/133/800/800",  description:"Acrylic on canvas. Inspired by the ancient Yoruba creation myth, this painting invites you to hear the silent voice of the universe. Every brushstroke was guided by prayer." },
+      { id:3, title:"Divine Reflection",    artist:"Chinedu Eze",       category:"digital",   price:450000,  image:"https://picsum.photos/id/201/800/800",  description:"Limited edition digital print (1/50). Created using AI-assisted sacred geometry and traditional Nigerian patterns. Comes with NFT certificate of authenticity." },
+      { id:4, title:"Heart of the Ancestors", artist:"Zainab Musa",     category:"sculpture", price:2100000, image:"https://picsum.photos/id/1005/800/800", description:"Bronze sculpture standing 65cm tall. Hand-cast in a secret foundry in Jos. The piece represents the unbroken chain of wisdom passed through generations." },
+      { id:5, title:"Dawn of Grace",        artist:"Adebayo Olumide",   category:"oil",       price:980000,  image:"https://picsum.photos/id/1016/800/800", description:"A serene sunrise captured in oil. The artist painted this piece at 5am every day for 21 days to capture the exact moment the first light touches the earth." },
+      { id:6, title:"Celestial Veil",       artist:"Fatima Nkemdilim",  category:"acrylic",   price:675000,  image:"https://picsum.photos/id/120/800/800",  description:"Large-scale acrylic triptych. When viewed together, the three panels reveal a hidden map of the heavens as seen by ancient African astronomers." },
+    ];
+
+    const stories = [
+      { id:1, tag:"Artist Journey", title:"The Day the Canvas Spoke", excerpt:"How Adebayo Olumide discovered divine inspiration while painting Eternal Flame…", image:"https://picsum.photos/id/1015/1200/800", text:"It was 3am in his Abuja studio when the brush suddenly moved on its own. For the first time in his life, Adebayo felt he was no longer the artist — he was merely the vessel. The gold leaf shimmered before he even touched it. By dawn, Eternal Flame was complete, though he could not recall finishing it. This is not a metaphor." },
+      { id:2, tag:"Sacred Process", title:"Bronze That Remembers",    excerpt:"The ancient ritual behind Fatima Nkemdilim's Heart of the Ancestors sculpture.", image:"https://picsum.photos/id/1005/800/600",  text:"Before every pour of molten bronze, Fatima performs a 400-year-old Igbo libation ceremony, speaking the names of ancestors who have passed. She believes the metal carries memory. Her collectors report that rooms housing her sculptures feel unusually quiet — a peaceful, watchful silence that was never there before." },
+      { id:3, tag:"Digital Sacred", title:"When Pixels Become Prayer", excerpt:"Chinedu Eze's journey from Lagos streets to creating digital divine art.", image:"https://picsum.photos/id/201/800/600",  text:"What started as graffiti on Lagos walls has become a global movement of sacred digital art. Chinedu's path from the streets of Surulere to international digital galleries is one of pure devotion. Each pixel is placed with the deliberateness of a monk illuminating a manuscript. 'Every frame is a prayer,' he says. 'I just translate.'" },
+    ];
+
+    const artists = [
+      { id:1, num:"01", name:"Adebayo Olumide",   spec:"Oil & Gold Leaf",     image:"https://picsum.photos/id/1011/600/800", desc:"Nigerian visionary working between Abuja and Lagos. His gold-leaf technique draws from Yoruba ceremonial art traditions spanning centuries." },
+      { id:2, num:"02", name:"Fatima Nkemdilim",  spec:"Bronze & Marble",     image:"https://picsum.photos/id/1005/600/800", desc:"Sculptor of light and memory. Her bronze works carry the weight of ancestry and the grace of futures yet unborn." },
+      { id:3, num:"03", name:"Chinedu Eze",        spec:"Digital & Mixed Media", image:"https://picsum.photos/id/1009/600/800", desc:"From Lagos streets to global digital galleries. Chinedu bridges the ancient and the algorithmic in every pixel he places." },
+      { id:4, num:"04", name:"Zainab Musa",        spec:"Acrylic Storyteller", image:"https://picsum.photos/id/338/600/800",  desc:"Acrylic storyteller rooted in Lagos and Abuja. Her bold palettes translate the invisible emotional life of African women onto canvas." },
+    ];
+
+    /* ═══════════════════════════════════
+       CART STATE
+    ═══════════════════════════════════ */
+    let cart = [];
+    let currentProduct = null;
+    let currentFilter = 'all';
+
+    /* ═══════════════════════════════════
+       NAV SCROLL EFFECT
+    ═══════════════════════════════════ */
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    /* ═══════════════════════════════════
+       MOBILE MENU
+    ═══════════════════════════════════ */
+    function toggleMobile() {
+      const menu = document.getElementById('mobile-menu');
+      const burger = document.getElementById('hamburger');
+      menu.classList.toggle('open');
+      burger.classList.toggle('open');
+      document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMobile() {
+      document.getElementById('mobile-menu').classList.remove('open');
+      document.getElementById('hamburger').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ═══════════════════════════════════
+       MARQUEE
+    ═══════════════════════════════════ */
+    function buildMarquee() {
+      const items = ['Original Artworks', 'Divine Stories', 'Worldwide Shipping', 'Authenticity Certified', 'Nigerian Craft', 'Sacred Originals', 'Hand-Selected', 'Artist Approved'];
+      const track = document.getElementById('marquee-track');
+      let html = '';
+      // duplicate for seamless loop
+      for (let i = 0; i < 2; i++) {
+        items.forEach(item => {
+          html += `<span class="marquee-item">${item}<span class="marquee-dot"></span></span>`;
+        });
+      }
+      track.innerHTML = html;
+    }
+
+    /* ═══════════════════════════════════
+       RENDER ART GRID
+    ═══════════════════════════════════ */
+    function renderArtGrid(list = artworks) {
+      const grid = document.getElementById('art-grid');
+      if (list.length === 0) {
+        grid.innerHTML = `<div class="art-card-empty">No artworks found — try a different filter.</div>`;
+        return;
+      }
+      grid.innerHTML = list.map(art => `
+        <div class="art-card" onclick="openProduct(${art.id})">
+          <img class="art-card-img" src="${art.image}" alt="${art.title}" loading="lazy">
+          <div class="art-card-overlay">
+            <div class="art-card-cat">${art.category}</div>
+            <div class="art-card-title">${art.title}</div>
+            <div class="art-card-artist">${art.artist}</div>
+            <div class="art-card-footer">
+              <span class="art-card-price">₦${art.price.toLocaleString()}</span>
+              <button class="art-card-btn" onclick="event.stopPropagation();openProduct(${art.id})">Read & Buy</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ═══════════════════════════════════
+       FILTER
+    ═══════════════════════════════════ */
+    function setFilter(btn, cat) {
+      currentFilter = cat;
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      filterArt();
+    }
+    function filterArt() {
+      const search = document.getElementById('search-input').value.toLowerCase().trim();
+      let list = artworks;
+      if (currentFilter !== 'all') list = list.filter(a => a.category === currentFilter);
+      if (search) list = list.filter(a => a.title.toLowerCase().includes(search) || a.artist.toLowerCase().includes(search));
+      renderArtGrid(list);
+    }
+
+    /* ═══════════════════════════════════
+       STORIES
+    ═══════════════════════════════════ */
+    function renderStories() {
+      document.getElementById('stories-grid').innerHTML = stories.map(s => `
+        <div class="story-card" onclick="openStory(${s.id})">
+          <img class="story-card-img" src="${s.image}" alt="${s.title}" loading="lazy">
+          <div class="story-card-layer">
+            <div class="story-card-tag">${s.tag}</div>
+            <div class="story-card-title">${s.title}</div>
+            <div class="story-card-excerpt">${s.excerpt}</div>
+            <div class="story-card-read">Read Story <i class="fa-solid fa-arrow-right"></i></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openStory(id) {
+      const s = stories.find(x => x.id === id);
+      if (!s) return;
+      document.getElementById('story-img').src = s.image;
+      document.getElementById('story-tag').textContent = s.tag;
+      document.getElementById('story-title-text').textContent = s.title;
+      document.getElementById('story-text').textContent = s.text;
+      document.getElementById('story-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeStory() {
+      document.getElementById('story-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ═══════════════════════════════════
+       ARTISTS
+    ═══════════════════════════════════ */
+    function renderArtists() {
+      document.getElementById('artists-grid').innerHTML = artists.map((a, i) => `
+        <div class="artist-card reveal" style="transition-delay:${i * 80}ms">
+          <div class="artist-img-wrap">
+            <img src="${a.image}" alt="${a.name}" loading="lazy">
+            <div class="artist-img-overlay"></div>
+            <div class="artist-img-num">${a.num}</div>
+            <button class="artist-img-btn" onclick="viewArtist(${a.id})"><i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+          <div class="artist-name">${a.name}</div>
+          <div class="artist-spec">${a.spec}</div>
+          <div class="artist-desc">${a.desc}</div>
+        </div>
+      `).join('');
+      observeReveal();
+    }
+
+    function viewArtist(id) {
+      const a = artists.find(x => x.id === id);
+      showToast(`📖 Opening journey of ${a.name} — (Demo)`);
+    }
+
+    /* ═══════════════════════════════════
+       PRODUCT MODAL
+    ═══════════════════════════════════ */
+    function openProduct(id) {
+      currentProduct = artworks.find(a => a.id === id);
+      if (!currentProduct) return;
+      document.getElementById('modal-img').innerHTML = `<img src="${currentProduct.image}" alt="${currentProduct.title}">`;
+      document.getElementById('modal-cat').textContent = currentProduct.category.toUpperCase();
+      document.getElementById('modal-title-text').textContent = currentProduct.title;
+      document.getElementById('modal-artist-name').textContent = currentProduct.artist;
+      document.getElementById('modal-desc').innerHTML = `<strong style="color:var(--gold);font-family:var(--font-ui);font-size:11px;letter-spacing:.15em;text-transform:uppercase">The Story</strong><br><br>${currentProduct.description}`;
+      document.getElementById('modal-price-val').textContent = `₦${currentProduct.price.toLocaleString()}`;
+      document.getElementById('product-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeProductModal() {
+      document.getElementById('product-modal').classList.remove('open');
+      document.body.style.overflow = '';
+      currentProduct = null;
+    }
+    function addCurrentToCart() {
+      if (!currentProduct) return;
+      addToCart(currentProduct);
+      closeProductModal();
+    }
+
+    /* ═══════════════════════════════════
+       CART
+    ═══════════════════════════════════ */
+    function addToCart(item) {
+      const existing = cart.find(c => c.id === item.id);
+      if (existing) existing.qty++;
+      else cart.push({ ...item, qty: 1 });
+      updateCartCount();
+      showToast(`<i class="fa-solid fa-check"></i> ${item.title} added to cart`);
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cart-count').textContent = count;
+    }
+
+    function openCart() {
+      renderCart();
+      document.getElementById('drawer-backdrop').classList.add('open');
+      document.getElementById('cart-drawer').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCart() {
+      document.getElementById('drawer-backdrop').classList.remove('open');
+      document.getElementById('cart-drawer').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function renderCart() {
+      const body = document.getElementById('cart-body');
+      const foot = document.getElementById('cart-foot');
+      if (cart.length === 0) {
+        body.innerHTML = `
+          <div class="cart-empty">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <p>Your cart is empty</p>
+            <button class="btn btn-outline" onclick="closeCart();document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Browse Collection</button>
+          </div>`;
+        foot.style.display = 'none';
+        return;
+      }
+      let total = 0;
+      body.innerHTML = cart.map((item, idx) => {
+        const sub = item.price * item.qty;
+        total += sub;
+        return `
+          <div class="cart-item">
+            <img class="cart-item-img" src="${item.image}" alt="${item.title}">
+            <div class="cart-item-info">
+              <div class="cart-item-title">${item.title}</div>
+              <div class="cart-item-artist">${item.artist}</div>
+              <div class="cart-item-row">
+                <div class="qty-control">
+                  <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
+                  <span class="qty-val">${item.qty}</span>
+                  <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
+                </div>
+                <span class="cart-item-price">₦${sub.toLocaleString()}</span>
+              </div>
+              <button class="cart-item-remove" onclick="removeItem(${idx})">Remove</button>
+            </div>
+          </div>`;
+      }).join('');
+      document.getElementById('cart-total').textContent = `₦${total.toLocaleString()}`;
+      foot.style.display = 'block';
+    }
+
+    function changeQty(idx, delta) {
+      cart[idx].qty += delta;
+      if (cart[idx].qty < 1) cart.splice(idx, 1);
+      updateCartCount();
+      renderCart();
+    }
+    function removeItem(idx) {
+      cart.splice(idx, 1);
+      updateCartCount();
+      renderCart();
+    }
+    function checkout() {
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      closeCart();
+      setTimeout(() => {
+        showToast(`🎉 Order placed! Total: ₦${total.toLocaleString()} (Demo — connect Paystack or Flutterwave)`);
+        cart = [];
+        updateCartCount();
+      }, 500);
+    }
+
+    /* ═══════════════════════════════════
+       LOGIN MODAL
+    ═══════════════════════════════════ */
+    let activeTab = 0;
+    function openLogin() {
+      document.getElementById('login-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLogin() {
+      document.getElementById('login-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function switchTab(t) {
+      activeTab = t;
+      document.getElementById('form-login').style.display  = t === 0 ? 'block' : 'none';
+      document.getElementById('form-signup').style.display = t === 1 ? 'block' : 'none';
+      document.getElementById('tab-0').classList.toggle('active', t === 0);
+      document.getElementById('tab-1').classList.toggle('active', t === 1);
+      document.getElementById('login-title').textContent = t === 0 ? 'Welcome Back' : 'Join DeusCorArtis';
+    }
+    function handleLogin() {
+      const email = document.getElementById('login-email').value;
+      const pass  = document.getElementById('login-password').value;
+      if (!email || !pass) { showToast('⚠ Please fill in all fields'); return; }
+      closeLogin();
+      showToast('<i class="fa-solid fa-check"></i> Welcome back to DeusCorArtis!');
+    }
+    function handleSignup() {
+      const first = document.getElementById('signup-first').value;
+      const email = document.getElementById('signup-email').value;
+      if (!first || !email) { showToast('⚠ Please fill in all fields'); return; }
+      closeLogin();
+      showToast('🎉 Account created — welcome to the divine family!');
+    }
+    function socialLogin(provider) {
+      showToast(`🔗 Connecting with ${provider}… (Demo)`);
+      setTimeout(() => { closeLogin(); showToast(`<i class="fa-solid fa-check"></i> Signed in with ${provider}`); }, 1000);
+    }
+
+    /* ═══════════════════════════════════
+       TOAST
+    ═══════════════════════════════════ */
+    function showToast(html) {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.innerHTML = html;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.classList.add('out');
+        setTimeout(() => el.remove(), 400);
+      }, 3000);
+    }
+
+    /* ═══════════════════════════════════
+       SCROLL REVEAL
+    ═══════════════════════════════════ */
+    function observeReveal() {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    }
+
+    /* ═══════════════════════════════════
+       KEYBOARD ESC
+    ═══════════════════════════════════ */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeProductModal();
+        closeCart();
+        closeLogin();
+        closeStory();
+        closeMobile();
+      }
+    });
+
+    /* ═══════════════════════════════════
+       INIT
+    ═══════════════════════════════════ */
+    function init() {
+      buildMarquee();
+      renderArtGrid();
+      renderStories();
+      renderArtists();
+      updateCartCount();
+      observeReveal();
+    }
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
