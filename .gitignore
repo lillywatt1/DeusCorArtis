@@ -1,7 +1,8 @@
+*log
 .env.example
 .env
 /vendor/
 node_modules/
 .htaccess
 ansofra-generator.sh
-Schema/
+/Schema/
