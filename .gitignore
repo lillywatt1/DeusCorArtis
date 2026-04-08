@@ -5,4 +5,4 @@
 node_modules/
 .htaccess
 ansofra-generator.sh
-/Schema/
+Schema/
