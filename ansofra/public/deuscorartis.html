@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="../ansofra/public/css/art.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="tailwind-ready bg-zinc-950 text-white">
+<body class="tailwind-ready">
 
     <!-- NAVBAR -->
-    <nav class="bg-zinc-900 border-b border-white/10 sticky top-0 z-50">
+    <nav id="baba" class=" border-b  sticky top-0 z-50">
         <div class="max-w-screen-2xl mx-auto px-6 py-5 flex items-center justify-between">
             <!-- Logo -->
-            <div class="flex items-center gap-x-3">
+            <div id="log" class="flex items-center gap-x-3">
                 <div class="w-9 h-9 bg-gradient-to-br from-amber-400 to-yellow-600 rounded-2xl flex items-center justify-center text-2xl shadow-inner">✧</div>
                 <h1 class="heading-font text-3xl tracking-tighter">DeusCorArtis</h1>
             </div>
@@ -72,13 +72,13 @@
           <div class="max-w-screen-2xl mx-auto px-6 text-center">
               <div class="max-w-3xl mx-auto">
                   <span id="see" class="inline-block px-6 py-2 bg-white/10 backdrop-blur-md rounded-3xl text-amber-400 text-sm tracking-[3px] mb-6">EST 2026 • ABUJA, NIGERIA</span>
-                  <h1 id="see" class="heading-font text-7xl md:text-8xl leading-none font-light tracking-tighter mb-6">
+                  <h1 id="see" class="heading-font text-5xl md:text-6xl rounded-3xl leading-none font-light tracking-tighter mb-6">
                       DEUS COR ARTIS
                   </h1>
-                  <p id="see" class="text-2xl md:text-3xl text-blue/80 mb-10">Where the heart of the divine meets the soul of art.<br>Read the stories. Own the masterpieces.</p>
+                  <p id="baba" class="text-1xl rounded-3xl md:text-2xl mb-10">Where the heart of the divine meets the soul of art.<br>Read the stories. Own the masterpieces.</p>
                   
-                  <div id="see" class="flex flex-col sm:flex-row gap-4 justify-center">
-                      <button onclick="navigateToSection('shop')" 
+                  <div  class="flex flex-col sm:flex-row gap-4 justify-center">
+                      <button id="see" onclick="navigateToSection('shop')" 
                               class="px-10 py-5 bg-amber-400 hover:bg-amber-300 text-zinc-950 font-medium rounded-2xl text-lg flex items-center justify-center gap-x-3">
                           <span>Browse the Collection</span>
                           <i class="fa-solid fa-arrow-right"></i>
@@ -89,13 +89,13 @@
                       </button>
                   </div>
                   
-                  <div id="se" class="mt-16 flex justify-center items-center gap-x-8 text-sm opacity-70">
+                  <div id="sees" class="mt-16 flex justify-center rounded-3xl items-center gap-x-8 text-sm opacity-1">
                       <div class="flex items-center gap-x-2">
-                          <i class="fa-solid fa-palette"></i>
+                          <i class=" fa-palette"></i>
                           <span>Original Artworks</span>
                       </div>
                       <div class="flex items-center gap-x-2">
-                          <i class="fa-solid fa-book-open"></i>
+                          <i class=" fa-book-open"></i>
                           <span>Stories Behind Every Piece</span>
                       </div>
                       <div class="flex items-center gap-x-2">
@@ -106,11 +106,11 @@
               </div>
           </div>
           
-          <!-- Scroll indicator -->
-          <div class="absolute bottom-12 left-1/2 flex flex-col items-center text-xs tracking-widest">
+          <!-- Scroll indicator 
+          <div id="see" class="absolute bottom-12 left-1/2 rounded-3xl flex flex-col items-center text-xs tracking-widest">
               SCROLL TO DISCOVER
-              <i class="fa-solid fa-chevron-down mt-2 animate-bounce"></i>
-          </div>
+              <i class=" fa-chevron-down mt-2 animate-bounce"></i>
+          </div>-->
       </section>
 
       <!-- SHOP SECTION -->
@@ -122,7 +122,7 @@
               </div>
               
               <div class="flex gap-x-4 mt-6 md:mt-0">
-                  <select id="category-filter" onchange="filterArt()" class="bg-zinc-900 border border-white/20 rounded-2xl px-6 py-3 text-sm">
+                  <select id="category-filter" onchange="filterArt()" class="bg-zinc-900 border border-white/10 rounded-2xl px-6 py-3 text-sm">
                       <option value="all">All Art</option>
                       <option value="oil">Oil on Canvas</option>
                       <option value="acrylic">Acrylic</option>
@@ -130,11 +130,11 @@
                       <option value="sculpture">Sculpture</option>
                   </select>
                   
-                  <input id="search-input" 
+                  <input type="search" id="search-input" 
                         onkeyup="if(event.key==='Enter') filterArt()" 
                         type="text" 
                         placeholder="Search by title or artist..." 
-                        class="bg-zinc-900 border border-white/20 rounded-2xl px-6 py-3 text-sm w-72 focus:outline-none focus:border-amber-400">
+                        class="bg-zinc-900 border border-white/20 rounded-2xl px-6 py-3 text-sm w-72 focus:outline-none focus:border-amber-400"/>
               </div>
           </div>
 
@@ -275,7 +275,7 @@
                     <i class="fa-brands fa-cc-mastercard"></i>
                     <i class="fa-brands fa-paypal"></i>
                 </div>
-                <p class="mt-auto text-[10px] text-white/30 pt-12">Built as a complete responsive demo for you.<br>Ready to deploy on Vercel or Netlify in seconds.</p>
+                <p class="mt-auto text-[10px] text-white/30 pt-12">Built By Akinola Emmanuel.</p>
             </div>
         </div>
     </footer>
@@ -815,7 +815,7 @@ function socialLogin(provider) {
                 const div = document.createElement('div')
                 div.className = "flex gap-4"
                 div.innerHTML = `
-                    <img src="${item.image}" class="w-20 h-20 object-cover rounded-2xl">
+                    <img src="${item.image}" class="w-20 h-15 object-cover rounded-2xl">
                     <div class="flex-1">
                         <h5 class="font-medium">${item.title}</h5>
                         <p class="text-xs text-white/60">${item.artist}</p>
