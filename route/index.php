@@ -45,6 +45,12 @@ elseif($url === $adminArea."/run_migration"){
     exit();
 }
 
+//src endpoints
+elseif($url === $docRoot . $rootDir."/DeusCorArtisAdmin" || $url === $docRoot . $rootDir."/DeusCorArtisAdmin"."/"){
+    require_once __DIR__ . "/../ansofra/public/admin/deuscorartisadmin.html";
+    exit();
+}
+
 
 // /api endpoints
 elseif($url === $docRoot . $rootDir . $usersArea."/register" || $url === $usersArea."/register"."/"){
@@ -56,6 +62,11 @@ elseif($url === $docRoot . $rootDir . $usersArea."/register" || $url === $usersA
 //usermekiwa endpoints
 elseif($url === $docRoot . $rootDir."/DeusCorArtis" || $url === $docRoot . $rootDir."/DeusCorArtis"."/"){
     require_once __DIR__ . "/../ansofra/public/deuscorartis.html";
+    exit();
+}
+
+elseif($url === $docRoot . $rootDir."/DeusCor" || $url === $docRoot . $rootDir."/DeusCor"."/"){
+    require_once __DIR__ . "/../ansofra/public/deus.html";
     exit();
 }
 

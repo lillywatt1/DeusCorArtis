@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>DeusCorArtis — Read. Feel. Own.</title>
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    /* ---------- GLOBAL RESET & VARIABLES ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cream: #f8f4ed;
+      --ink: #1a1208;
+      --sepia: #7c5c2e;
+      --rust: #c0392b;
+      --mist: #e8e2d7;
+      --dim: #8a7f70;
+      --shop-bg: #0f1923;
+      --shop-acc: #e8b84b;
+      --shop-dim: #8fa3b1;
+      --serif: 'Libre Baskerville', Georgia, serif;
+      --title: 'Bebas Neue', sans-serif;
+      --sans: 'Lato', sans-serif;
+      --ease: cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      --transition: all 0.4s var(--ease);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--serif);
+      overflow-x: hidden;
+      line-height: 1.4;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    button {
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      color: inherit;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--cream);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--sepia);
+      border-radius: 3px;
+    }
+
+    /* paper texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* utility */
+    .wrap {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    @media (max-width: 700px) {
+      .wrap {
+        padding: 0 20px;
+      }
+    }
+
+    /* ---------- REVEAL ANIMATION ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+    .reveal.vis {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- NAVIGATION (RESTRUCTURED SEMANTICS) ---------- */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 400;
+      background: var(--cream);
+      border-bottom: 2px solid var(--ink);
+      display: flex;
+      align-items: stretch;
+      height: 70px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 32px;
+      border-right: 2px solid var(--ink);
+      font-family: var(--title);
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .brand-dot {
+      width: 9px;
+      height: 9px;
+      background: var(--rust);
+      border-radius: 50%;
+    }
+    .nav-links {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .nav-tab {
+      padding: 0 26px;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: var(--transition);
+      height: 100%;
+      display: inline-flex;
+      align-items: center;
+    }
+    .nav-tab:hover {
+      color: var(--ink);
+    }
+    .nav-tab.active-read {
+      color: var(--ink);
+      border-bottom-color: var(--ink);
+    }
+    .nav-tab.active-shop {
+      color: var(--rust);
+      border-bottom-color: var(--rust);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      border-left: 2px solid var(--ink);
+    }
+    .nav-icon {
+      width: 60px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid rgba(26, 18, 8, 0.08);
+      font-size: 15px;
+      color: var(--dim);
+      transition: var(--transition);
+      position: relative;
+    }
+    .nav-icon:hover {
+      color: var(--ink);
+      background: var(--mist);
+    }
+    .cart-badge {
+      position: absolute;
+      top: 14px;
+      right: 12px;
+      background: var(--rust);
+      color: white;
+      font-family: var(--sans);
+      font-size: 8px;
+      font-weight: bold;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hamburger {
+      display: none;
+      width: 60px;
+      flex-direction: column;
+      gap: 5px;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .hamburger span {
+      width: 22px;
+      height: 2px;
+      background: var(--ink);
+      transition: 0.2s;
+    }
+    @media (max-width: 860px) {
+      .nav-links {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+      }
+    }
+    .mobile-menu {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--cream);
+      z-index: 390;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      transform: translateY(-110%);
+      transition: transform 0.45s var(--ease);
+      border-top: 2px solid var(--ink);
+    }
+    .mobile-menu.open {
+      transform: translateY(0);
+    }
+    .mobile-menu button {
+      font-family: var(--title);
+      font-size: clamp(2rem, 7vw, 3.5rem);
+      letter-spacing: 0.04em;
+      color: var(--dim);
+      transition: color 0.2s;
+    }
+    .mobile-menu button:hover {
+      color: var(--ink);
+    }
+
+    /* ---------- READ WORLD (RESTRUCTURED LAYOUT) ---------- */
+    .mag-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 85vh;
+      border-bottom: 2px solid var(--ink);
+    }
+    .hero-left {
+      padding: 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 2px solid var(--ink);
+    }
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 7s ease;
+    }
+    .hero-right:hover img {
+      transform: scale(1.03);
+    }
+    .img-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 28px;
+      background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: white;
+      text-transform: uppercase;
+    }
+    .issue-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--rust);
+      text-transform: uppercase;
+    }
+    .issue-tag::before {
+      content: '';
+      width: 32px;
+      height: 2px;
+      background: var(--rust);
+    }
+    .hero-title {
+      font-family: var(--title);
+      font-size: clamp(3rem, 8vw, 6rem);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      margin: 24px 0 16px;
+    }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--dim);
+      font-style: italic;
+      max-width: 460px;
+      line-height: 1.6;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--ink);
+      color: var(--cream);
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover {
+      background: var(--rust);
+      transform: translateX(5px);
+    }
+    .section-divider {
+      display: flex;
+      align-items: center;
+      border-top: 2px solid var(--ink);
+      border-bottom: 1px solid rgba(26, 18, 8, 0.1);
+    }
+    .divider-text {
+      padding: 12px 28px;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      border-right: 1px solid rgba(0,0,0,0.08);
+    }
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-left: 2px solid var(--ink);
+      border-right: 2px solid var(--ink);
+    }
+    @media (max-width: 900px) {
+      .story-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .mag-hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-left {
+        padding: 40px 24px;
+      }
+    }
+    @media (max-width: 560px) {
+      .story-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .story-card {
+      border-right: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .story-card:hover {
+      background: var(--mist);
+    }
+    .story-thumb {
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+    }
+    .story-thumb img {
+      transition: transform 0.5s var(--ease);
+    }
+    .story-card:hover .story-thumb img {
+      transform: scale(1.05);
+    }
+    .story-body {
+      padding: 28px 24px 32px;
+    }
+    .story-tag {
+      font-family: var(--sans);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--rust);
+      margin-bottom: 8px;
+    }
+    .story-title {
+      font-family: var(--title);
+      font-size: 1.7rem;
+      line-height: 1.05;
+      margin-bottom: 12px;
+    }
+    .long-read-block {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      border-top: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+    }
+    @media (max-width: 860px) {
+      .long-read-block {
+        grid-template-columns: 1fr;
+      }
+    }
+    .pull-quote {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 70px 48px;
+      text-align: center;
+    }
+    .artists-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 2px solid var(--ink);
+    }
+    @media (max-width: 860px) {
+      .artists-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 560px) {
+      .artists-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+    .artist-card {
+      border-right: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      padding: 80px 0;
+    }
+    @media (max-width: 860px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+    /* shop world */
+    .shop-hero {
+      background: linear-gradient(135deg, #0f1923, #182837);
+      min-height: 60vh;
+      display: flex;
+      align-items: flex-end;
+      border-bottom: 1px solid rgba(232,184,75,0.2);
+    }
+    .shop-filters {
+      display: flex;
+      overflow-x: auto;
+      border-bottom: 1px solid rgba(232,184,75,0.15);
+      gap: 6px;
+    }
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(232,184,75,0.1);
+    }
+    @media (max-width: 1100px) {
+      .shop-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 780px) {
+      .shop-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    /* footer */
+    .footer-links {
+      display: grid;
+      grid-template-columns: 1.2fr repeat(3, 1fr);
+      border-top: 2px solid var(--ink);
+    }
+    @media (max-width: 860px) {
+      .footer-links {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    /* modal, cart, reader same robust structure but compressed for brevity */
+    .reader, .modal-veil, .cart-veil, .login-veil {
+      transition: opacity 0.3s, transform 0.4s;
+    }
+    .reader.open, .modal-veil.open, .cart-veil.open, .login-veil.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .btn-shop-acc {
+      background: var(--shop-acc);
+      color: var(--shop-bg);
+      padding: 14px 26px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<header class="nav-bar" id="navBar">
+  <div class="nav-brand" id="brandHome">
+    <div class="brand-dot"></div>
+    <span>DeusCorArtis</span>
+  </div>
+  <div class="nav-links">
+    <button class="nav-tab active-read" id="readTabBtn">Read Stories</button>
+    <button class="nav-tab" id="shopTabBtn">Buy Art & Frames</button>
+    <button class="nav-tab" id="artistsNavBtn">Artists</button>
+    <button class="nav-tab" id="aboutNavBtn">About</button>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-icon" id="loginIconBtn"><i class="fa-regular fa-user"></i></button>
+    <button class="nav-icon" id="cartIconBtn"><i class="fa-solid fa-bag-shopping"></i><span class="cart-badge" id="cartCount">0</span></button>
+    <div class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <button data-nav="read">Read Stories</button>
+  <button data-nav="shop">Buy Art</button>
+  <button data-nav="artists">Artists</button>
+  <button data-nav="about">About</button>
+</div>
+
+<!-- READ WORLD -->
+<main id="readWorld">
+  <div class="mag-hero">
+    <div class="hero-left">
+      <div><div class="issue-tag">Issue №001 · April 2026</div><h1 class="hero-title">THE DAY<br>THE CANVAS<br>SPOKE</h1><p class="hero-sub">How Adebayo Olumide discovered divine inspiration at 3am — and why he believes the brush moved before he did.</p></div>
+      <div><div class="byline" style="display:flex; gap:12px; align-items:center; margin-bottom:18px;"><img src="https://picsum.photos/id/1011/60/60" style="width:44px;height:44px;border-radius:50%;" alt="author"><div><strong>Adebayo Olumide</strong><div style="font-size:12px;">Artist & Author · 12 min read</div></div></div><button class="btn-primary" data-story="0">Read Full Story <i class="fa-solid fa-arrow-right"></i></button></div>
+    </div>
+    <div class="hero-right"><img src="https://picsum.photos/id/1015/1200/900" alt="Eternal Flame"><div class="img-caption">Eternal Flame · Oil on canvas · Gold leaf · 2026</div></div>
+  </div>
+  <div class="section-divider"><div class="divider-text">Latest Stories</div><div style="padding:12px 20px; font-size:10px;">6 stories this month</div></div>
+  <div class="story-grid" id="storyGridContainer"></div>
+
+  <div class="long-read-block">
+    <div style="padding:56px 48px; border-right:2px solid var(--ink);"><div style="background:var(--rust); display:inline-block; padding:6px 14px; font-size:9px; letter-spacing:0.2em; color:white;">Long Read</div><h2 style="font-family:var(--title); font-size:clamp(2rem,5vw,4rem); margin:20px 0 16px;">WHEN PIXELS BECOME PRAYER</h2><p style="font-style:italic; color:var(--dim); margin-bottom:32px;">Chinedu Eze's journey from the graffiti walls of Surulere to the global digital art stage — told in his own words.</p><button class="btn-primary" data-story="2">Read Story <i class="fa-solid fa-arrow-right"></i></button></div>
+    <div><img src="https://picsum.photos/id/201/900/1100" style="width:100%; height:100%; object-fit:cover;" alt="digital art"></div>
+  </div>
+
+  <div class="pull-quote"><blockquote style="font-family:var(--title); font-size:clamp(1.8rem,4vw,3.2rem);">“ART IS NOT DECORATION.<br>IT IS A CONVERSATION WITH THE DIVINE.”</blockquote><cite style="font-size:11px;">— Dr. Ifeoma Nwosu, Founder · DeusCorArtis</cite></div>
+
+  <div id="artistsSection"><div class="section-divider"><div class="divider-text">The Artists</div><div>18 living artists</div></div><div class="artists-strip" id="artistsStrip"></div></div>
+
+  <div id="aboutSection"><div class="wrap"><div class="about-grid"><div class="reveal"><div class="issue-tag" style="margin-bottom:12px;">Our Manifesto</div><h2 class="hero-title" style="font-size:clamp(2.2rem,6vw,4rem);">THE HEART OF GOD.<br>THE SOUL OF ART.</h2><p style="font-size:1rem; color:var(--dim); margin:24px 0;">DeusCorArtis began in Abuja with a single belief: every artwork contains a divine story worth telling. Read before you own.</p><div style="display:flex; gap:48px; margin-top:32px;"><div><span style="font-family:var(--title); font-size:2rem; color:var(--rust);">42</span><div>Masterpieces</div></div><div><span style="font-family:var(--title); font-size:2rem; color:var(--rust);">18</span><div>Artists</div></div></div></div><div class="reveal"><img src="https://picsum.photos/id/1039/800/1000" style="width:100%; aspect-ratio:4/5; object-fit:cover; border:2px solid var(--ink);" alt="studio"></div></div></div></div>
+
+  <div class="footer-links"><div style="padding:40px 32px;"><div style="font-family:var(--title); font-size:22px;">DeusCorArtis</div><div style="font-size:12px; margin-top:6px;">Abuja, Nigeria · Est 2026<br>Where art meets eternity.</div></div><div style="padding:40px 32px;"><div style="font-weight:700;">Read</div><a href="#" data-nav="read" style="display:block; margin-top:12px;">Latest Stories</a></div><div style="padding:40px 32px;"><div style="font-weight:700;">Shop</div><a href="#" data-nav="shop" style="display:block; margin-top:12px;">Original Paintings</a></div><div style="padding:40px 32px;"><div style="font-weight:700;">Connect</div><a href="#">Instagram</a></div></div>
+  <div style="border-top:2px solid var(--ink); padding:18px 32px; display:flex; justify-content:space-between; font-size:10px;"><span>© 2026 DeusCorArtis · All Rights Reserved</span><span>Designed in Abuja</span></div>
+</main>
+
+<!-- SHOP WORLD (initially hidden) -->
+<div id="shopWorld" style="display:none; background:var(--shop-bg); color:#e8e0d0;">
+  <div class="shop-hero"><div style="padding:48px 48px 60px; width:100%;"><div style="color:var(--shop-acc); letter-spacing:0.2em;">The Collection · 2026</div><h1 style="font-family:var(--title); font-size:clamp(3rem,8vw,6rem);">Own the<br><em style="font-style:italic;">Masterpiece</em></h1><p style="max-width:500px; margin-top:16px;">Original artworks, framed prints, and sculptures — each with a story you've already read.</p></div></div>
+  <div class="shop-filters" id="shopFilters"><button class="sf-btn active" data-cat="all">All Works</button><button data-cat="oil">Oil Paintings</button><button data-cat="frame">Framed Prints</button><button data-cat="acrylic">Acrylic</button><button data-cat="digital">Digital</button><button data-cat="sculpture">Sculpture</button><div style="margin-left:auto; padding:0 20px;"><input type="text" id="shopSearch" placeholder="Search…" style="background:none; border-bottom:1px solid rgba(232,184,75,0.3); padding:6px 0; color:white;"></div></div>
+  <div class="shop-grid" id="shopGrid"></div>
+  <div class="footer-links" style="border-color:rgba(232,184,75,0.2);"><div style="padding:40px 32px;"><div style="font-family:var(--title);">DeusCorArtis</div><div style="font-size:12px;">Secure checkout · Free shipping</div></div><div style="padding:40px 32px;"><div>Help</div><a href="#">Shipping</a></div></div>
+</div>
+
+<!-- READER MODAL -->
+<div class="reader" id="readerModal" style="position:fixed; inset:0; background:var(--cream); z-index:1100; transform:translateY(100%); transition:transform 0.4s var(--ease); overflow-y:auto;"><div style="position:sticky; top:0; background:var(--cream); border-bottom:2px solid var(--ink); padding:16px 32px; display:flex; justify-content:space-between;"><button id="closeReaderBtn">← Back</button><span id="readerMin"></span></div><div id="readerContent"></div></div>
+<!-- PRODUCT MODAL -->
+<div class="modal-veil" id="productModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;"><div style="max-width:900px; width:90%; background:#152030; display:grid; grid-template-columns:1fr 1fr;"><div id="modalImg"></div><div style="padding:32px;" id="modalInfo"></div></div></div>
+<!-- CART -->
+<div class="cart-veil" id="cartOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:800; opacity:0; pointer-events:none;"></div><div class="cart-panel" id="cartPanel" style="position:fixed; right:0; top:0; bottom:0; width:400px; background:var(--shop-bg); z-index:810; transform:translateX(100%); transition:transform 0.4s;"><div id="cartInner"></div></div>
+<!-- LOGIN -->
+<div class="login-veil" id="loginModal" style="position:fixed; inset:0; background:rgba(26,18,8,0.9); z-index:1200; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none;"><div style="background:var(--cream); max-width:420px; width:100%; padding:28px;"><h3>Sign In</h3><input type="email" placeholder="Email" id="loginEmail"><input type="password" placeholder="Password" id="loginPass"><button id="doLoginBtn">Login</button><button id="closeLoginBtn">Cancel</button></div></div>
+
+<script>
+  // DATA (same as original)
+  const STORIES = [{id:0,tag:"Artist Journal",title:"The Day the Canvas Spoke",excerpt:"How Adebayo Olumide discovered divine inspiration at 3am...",image:"https://picsum.photos/id/1015/1200/700",authorImg:"https://picsum.photos/id/1011/80/80",author:"Adebayo Olumide",date:"April 2, 2026",mins:"12 min read",kicker:"Artist Journal",deck:"The brush moved before I did.",linkedProduct:0,body:`<p>It was 3am...</p>`},{id:1,tag:"Sacred Process",title:"Bronze That Remembers",excerpt:"The 400-year-old Igbo ritual...",image:"https://picsum.photos/id/1005/1200/700",authorImg:"https://picsum.photos/id/1005/80/80",author:"Fatima Nkemdilim",date:"March 28, 2026",mins:"9 min read",kicker:"Sacred Process",deck:"Metal carries memory.",linkedProduct:3,body:`<p>Before every pour...</p>`},{id:2,tag:"Digital Sacred",title:"When Pixels Become Prayer",excerpt:"Chinedu Eze on how Lagos street graffiti became a movement...",image:"https://picsum.photos/id/201/1200/700",authorImg:"https://picsum.photos/id/1009/80/80",author:"Chinedu Eze",date:"March 15, 2026",mins:"15 min read",kicker:"Digital Sacred",deck:"Every frame is a prayer.",linkedProduct:2,body:`<p>The first mural...</p>`},{id:3,tag:"Acrylic Stories",title:"Color is a Language I Had to Learn",excerpt:"Zainab Musa on growing up voiceless...",image:"https://picsum.photos/id/338/1200/700",authorImg:"https://picsum.photos/id/338/80/80",author:"Zainab Musa",date:"March 10, 2026",mins:"8 min read",kicker:"Acrylic Stories",deck:"I did not speak until I was six.",linkedProduct:5,body:`<p>Language came late...</p>`},{id:4,tag:"Dawn Series",title:"Twenty-One Dawns",excerpt:"Adebayo Olumide painted at 5am...",image:"https://picsum.photos/id/1016/1200/700",authorImg:"https://picsum.photos/id/1011/80/80",author:"Adebayo Olumide",date:"Feb 28, 2026",mins:"6 min read",kicker:"Dawn Series",deck:"The light changes...",linkedProduct:4,body:`<p>I set my alarm...</p>`},{id:5,tag:"Between Worlds",title:"The Hidden Map of Heaven",excerpt:"How Fatima Nkemdilim encoded a star chart...",image:"https://picsum.photos/id/120/1200/700",authorImg:"https://picsum.photos/id/1005/80/80",author:"Fatima Nkemdilim",date:"Feb 14, 2026",mins:"11 min read",kicker:"Between Worlds",deck:"There is a version...",linkedProduct:5,body:`<p>There is a version...</p>`}];
+  const PRODUCTS = [{id:0,title:"Eternal Flame",artist:"Adebayo Olumide",cat:"oil",price:1250000,badge:"Original",image:"https://picsum.photos/id/1015/800/1000",desc:"Breathtaking oil painting..."},{id:1,title:"Whispers of the Cosmos",artist:"Fatima Nkemdilim",cat:"acrylic",price:850000,badge:"",image:"https://picsum.photos/id/133/800/1000",desc:"Large acrylic..."},{id:2,title:"Divine Reflection",artist:"Chinedu Eze",cat:"digital",price:450000,badge:"1/50",image:"https://picsum.photos/id/201/800/1000",desc:"Limited edition..."},{id:3,title:"Heart of the Ancestors",artist:"Zainab Musa",cat:"sculpture",price:2100000,badge:"Bronze",image:"https://picsum.photos/id/1005/800/1000",desc:"Bronze sculpture..."},{id:4,title:"Dawn of Grace",artist:"Adebayo Olumide",cat:"oil",price:980000,badge:"",image:"https://picsum.photos/id/1016/800/1000",desc:"Oil on canvas..."},{id:5,title:"Celestial Veil",artist:"Fatima Nkemdilim",cat:"acrylic",price:675000,badge:"Triptych",image:"https://picsum.photos/id/120/800/1000",desc:"Three-panel acrylic..."},{id:6,title:"Sacred Geometry I",artist:"Chinedu Eze",cat:"frame",price:280000,badge:"Framed",image:"https://picsum.photos/id/167/800/1000",desc:"Museum-quality framed..."},{id:7,title:"Ancestral Voices",artist:"Zainab Musa",cat:"frame",price:195000,badge:"Framed",image:"https://picsum.photos/id/250/800/1000",desc:"Framed acrylic..."}];
+  const ARTISTS = [{num:"01",name:"Adebayo Olumide",spec:"Oil & Gold Leaf",img:"https://picsum.photos/id/1011/600/800",story:0},{num:"02",name:"Fatima Nkemdilim",spec:"Bronze & Acrylic",img:"https://picsum.photos/id/1005/600/800",story:1},{num:"03",name:"Chinedu Eze",spec:"Digital",img:"https://picsum.photos/id/1009/600/800",story:2},{num:"04",name:"Zainab Musa",spec:"Acrylic",img:"https://picsum.photos/id/338/600/800",story:3}];
+  let cart = [], currentCat = "all", shopFilter = "";
+
+  function renderStoryGrid(){ const container=document.getElementById('storyGridContainer'); if(container) container.innerHTML=STORIES.map(s=>`<div class="story-card" data-story-id="${s.id}"><div class="story-thumb"><img src="${s.image}" loading="lazy"></div><div class="story-body"><div class="story-tag">${s.tag}</div><div class="story-title">${s.title}</div><div class="story-excerpt" style="font-size:14px; color:var(--dim);">${s.excerpt}</div><div style="margin-top:16px;"><span>${s.mins}</span><span style="float:right;">Read →</span></div></div></div>`).join(''); document.querySelectorAll('.story-card').forEach(c=>c.addEventListener('click',()=>openStory(parseInt(c.dataset.storyId))));}
+  function renderArtists(){ const strip=document.getElementById('artistsStrip'); if(strip) strip.innerHTML=ARTISTS.map(a=>`<div class="artist-card" data-artist-story="${a.story}"><div><img src="${a.img}" style="aspect-ratio:4/5;"></div><div style="padding:16px;"><strong>${a.name}</strong><div style="color:var(--rust); font-size:10px;">${a.spec}</div></div></div>`).join(''); document.querySelectorAll('.artist-card').forEach(c=>c.addEventListener('click',()=>openStory(parseInt(c.dataset.artistStory))));}
+  function renderShop(){ let filtered = PRODUCTS.filter(p=>currentCat==='all'?true:p.cat===currentCat); if(shopFilter) filtered=filtered.filter(p=>p.title.toLowerCase().includes(shopFilter)||p.artist.toLowerCase().includes(shopFilter)); document.getElementById('shopGrid').innerHTML=filtered.map(p=>`<div class="shop-card" data-prod-id="${p.id}"><div><img src="${p.image}" style="aspect-ratio:3/4;"></div><div style="padding:16px;"><div>${p.title}</div><div>${p.artist}</div><div>₦${p.price.toLocaleString()}</div><button class="viewProdBtn" data-id="${p.id}">View</button></div></div>`).join(''); document.querySelectorAll('.viewProdBtn').forEach(btn=>btn.addEventListener('click',(e)=>{ e.stopPropagation(); openProduct(parseInt(btn.dataset.id)); })); document.querySelectorAll('.shop-card').forEach(card=>card.addEventListener('click',()=>openProduct(parseInt(card.dataset.prodId))));}
+  function openStory(id){ const s=STORIES[id]; if(!s)return; const reader=document.getElementById('readerModal'); document.getElementById('readerContent').innerHTML=`<h1>${s.title}</h1><p>${s.deck}</p><div>${s.body.substring(0,300)}... (full story demo)</div>`; reader.classList.add('open'); document.body.style.overflow='hidden';}
+  function openProduct(id){ const p=PRODUCTS[id]; document.getElementById('modalImg').innerHTML=`<img src="${p.image}" style="width:100%;">`; document.getElementById('modalInfo').innerHTML=`<h3>${p.title}</h3><p>${p.artist}</p><p>₦${p.price.toLocaleString()}</p><button id="modalAddCart">Add to Cart</button>`; document.getElementById('productModal').style.opacity='1'; document.getElementById('productModal').style.pointerEvents='all'; document.getElementById('modalAddCart').onclick=()=>{ addToCart(p); closeProduct();};}
+  function closeProduct(){ document.getElementById('productModal').style.opacity='0'; document.getElementById('productModal').style.pointerEvents='none';}
+  function addToCart(item){ const existing=cart.find(i=>i.id===item.id); if(existing)existing.qty+=1; else cart.push({...item,qty:1}); updateCartUI(); toast(`${item.title} added to cart`);}
+  function updateCartUI(){ const total=cart.reduce((s,i)=>s+i.price*i.qty,0); document.getElementById('cartCount').innerText=cart.reduce((s,i)=>s+i.qty,0); document.getElementById('cartInner').innerHTML=cart.length?`<div>${cart.map(i=>`<div>${i.title} x${i.qty} - ₦${(i.price*i.qty).toLocaleString()}</div>`).join('')}<div>Total: ₦${total.toLocaleString()}</div><button id="checkoutBtn">Checkout</button>`:`<div>Cart empty</div>`; if(document.getElementById('checkoutBtn')) document.getElementById('checkoutBtn').onclick=()=>{ alert('Order placed (demo)'); cart=[]; updateCartUI(); closeCart(); };}
+  function openCart(){ document.getElementById('cartOverlay').style.opacity='1'; document.getElementById('cartPanel').style.transform='translateX(0)'; document.getElementById('cartOverlay').style.pointerEvents='all';}
+  function closeCart(){ document.getElementById('cartOverlay').style.opacity='0'; document.getElementById('cartPanel').style.transform='translateX(100%)'; document.getElementById('cartOverlay').style.pointerEvents='none';}
+  function toast(msg){ const t=document.createElement('div'); t.innerText=msg; t.style.position='fixed'; t.style.bottom='20px'; t.style.right='20px'; t.style.background='var(--ink)'; t.style.color='white'; t.style.padding='12px 18px'; t.style.zIndex='9999'; document.body.appendChild(t); setTimeout(()=>t.remove(),2000);}
+  function goRead(){ document.getElementById('readWorld').style.display='block'; document.getElementById('shopWorld').style.display='none'; document.getElementById('readTabBtn').classList.add('active-read'); document.getElementById('shopTabBtn').classList.remove('active-shop'); document.getElementById('navBar').style.background='var(--cream)'; document.getElementById('navBar').style.borderColor='var(--ink)';}
+  function goShop(){ document.getElementById('readWorld').style.display='none'; document.getElementById('shopWorld').style.display='block'; document.getElementById('shopTabBtn').classList.add('active-shop'); document.getElementById('readTabBtn').classList.remove('active-read'); document.getElementById('navBar').style.background='var(--shop-bg)'; document.getElementById('navBar').style.borderColor='rgba(232,184,75,0.2)'; renderShop();}
+  document.getElementById('readTabBtn').onclick=goRead; document.getElementById('shopTabBtn').onclick=goShop; document.getElementById('brandHome').onclick=goRead; document.getElementById('cartIconBtn').onclick=openCart; document.getElementById('loginIconBtn').onclick=()=>{document.getElementById('loginModal').style.opacity='1'; document.getElementById('loginModal').style.pointerEvents='all';}; document.getElementById('closeLoginBtn')?.addEventListener('click',()=>{document.getElementById('loginModal').style.opacity='0';document.getElementById('loginModal').style.pointerEvents='none';}); document.getElementById('doLoginBtn').onclick=()=>{ alert('Logged in demo'); document.getElementById('loginModal').style.opacity='0';};
+  document.getElementById('closeReaderBtn').onclick=()=>{document.getElementById('readerModal').classList.remove('open'); document.body.style.overflow='';};
+  document.querySelectorAll('.sf-btn').forEach(btn=>btn.addEventListener('click',()=>{ currentCat=btn.dataset.cat; document.querySelectorAll('.sf-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderShop();}));
+  document.getElementById('shopSearch').addEventListener('input',(e)=>{ shopFilter=e.target.value.toLowerCase(); renderShop();});
+  renderStoryGrid(); renderArtists(); renderShop(); updateCartUI();
+  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');})},{threshold:0.1}); document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+  // mobile
+  document.getElementById('hamburgerBtn').onclick=()=>document.getElementById('mobileMenu').classList.toggle('open');
+  document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click',(e)=>{ const nav=e.currentTarget.dataset.nav; if(nav==='read') goRead(); if(nav==='shop') goShop(); if(nav==='artists') document.getElementById('artistsSection').scrollIntoView({behavior:'smooth'}); if(nav==='about') document.getElementById('aboutSection').scrollIntoView({behavior:'smooth'}); document.getElementById('mobileMenu').classList.remove('open');}));
+  document.querySelectorAll('.btn-primary').forEach(btn=>btn.addEventListener('click',(e)=>{ const idx=btn.dataset.story; if(idx!==undefined) openStory(parseInt(idx)); }));
+</script>
+</body>
+</html>
