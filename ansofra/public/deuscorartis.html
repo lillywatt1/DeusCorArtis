@@ -17,7 +17,7 @@
   <header class="top-nav">
     <div class="top-nav-row1">
       <div class="brand">
-        <div class="brand-mark">✧</div>
+        <div class="brand-mark">D</div>
         <span class="brand-name">DeusCorArtis</span>
       </div>
       <div class="nav-icons">
@@ -45,6 +45,7 @@
     <button class="pill" data-cat="acrylic" onclick="setCategory(this,'acrylic')">Acrylic</button>
     <button class="pill" data-cat="digital" onclick="setCategory(this,'digital')">Digital</button>
     <button class="pill" data-cat="sculpture" onclick="setCategory(this,'sculpture')">Sculpture</button>
+    <button class="pill" data-cat="gallery" onclick="openGallery()" style="background:var(--gold-bg);border-color:var(--gold);color:var(--gold)"><i class="fa-solid fa-images"></i> Gallery</button>
   </div>
 
   <!-- ─── MAIN CONTENT ─── -->
@@ -98,9 +99,9 @@
       <i class="fa-regular fa-book-open"></i>
       <span>Stories</span>
     </div>
-    <div class="bn-item" onclick="setCategory(document.querySelector('[data-cat=all]'),'all')">
-      <i class="fa-solid fa-palette"></i>
-      <span>Shop</span>
+    <div class="bn-item" onclick="openGallery()">
+      <i class="fa-solid fa-images"></i>
+      <span>Gallery</span>
     </div>
     <div class="bn-item" onclick="openCart()">
       <i class="fa-solid fa-bag-shopping"></i>
@@ -212,6 +213,50 @@
       <div class="l-field"><label>Password</label><input type="password" id="su-pass" placeholder="Strong password"></div>
       <button class="l-submit" onclick="doSignup()">Create Account</button>
       <p class="l-switch">Have account? <span onclick="switchLoginTab(0)">Sign in</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── GALLERY MODAL ─── -->
+<div class="gallery-modal" id="gallery-modal">
+  <div class="gallery-header">
+    <div class="gallery-header-title">
+      <i class="fa-solid fa-images"></i> Gallery
+    </div>
+    <button class="gallery-x" onclick="closeGallery()">✕</button>
+  </div>
+  <div class="gallery-tabs">
+    <div class="g-tab active" id="gtab-biro" onclick="switchGalleryTab('biro')">
+      <i class="fa-solid fa-pen-nib"></i> Biro Work
+    </div>
+    <div class="g-tab" id="gtab-digital" onclick="switchGalleryTab('digital')">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> Digital Art
+    </div>
+  </div>
+  <div class="gallery-sub-pills" id="gallery-sub-pills">
+    <!-- injected by JS -->
+  </div>
+  <div class="gallery-scroll">
+    <div class="masonry" id="gallery-grid"></div>
+  </div>
+</div>
+
+<!-- ─── LIGHTBOX ─── -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-top">
+    <button class="lb-x" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
+    <span class="lb-counter" id="lb-counter">1 / 12</span>
+    <div style="width:34px"></div>
+  </div>
+  <div class="lightbox-img-wrap" id="lb-img-wrap">
+    <img class="lightbox-img" id="lb-img" src="" alt="">
+    <div class="lb-arrows">
+      <button class="lb-arr" onclick="lbNav(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="lb-arr" onclick="lbNav(1)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="lb-info">
+      <div class="lb-title" id="lb-title"></div>
+      <div class="lb-sub" id="lb-sub"></div>
     </div>
   </div>
 </div>

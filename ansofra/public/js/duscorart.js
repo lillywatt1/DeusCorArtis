@@ -1,4 +1,3 @@
-
 /* ══════════ DATA ══════════ */
 const STORIES = [
   {id:0,tag:"Artist Journal",title:"The Day the Canvas Spoke",mins:"12 min",image:"https://picsum.photos/id/1015/800/600",authorImg:"https://picsum.photos/id/1011/80/80",author:"Adebayo Olumide",date:"April 2, 2026",kicker:"Artist Journal",deck:"The brush moved before I did. This is not a metaphor.",linkedProduct:0,
@@ -294,11 +293,163 @@ function toast(html){
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),350);},3000);
 }
 
+/* ══════════ GALLERY DATA ══════════ */
+const GALLERY = {
+  biro: [
+    {id:'b1',title:'The Watcher',sub:'Biro on cartridge · 2024',tag:'Portrait',img:'https://picsum.photos/id/1011/600/800'},
+    {id:'b2',title:'Fractured Light',sub:'Ballpoint on board · 2023',tag:'Abstract',img:'https://picsum.photos/id/1074/600/900'},
+    {id:'b3',title:'Market Morning',sub:'Biro on A2 paper · 2024',tag:'Scene',img:'https://picsum.photos/id/1067/600/750'},
+    {id:'b4',title:'Ancient Faces',sub:'Biro cross-hatch · 2023',tag:'Portrait',img:'https://picsum.photos/id/1012/600/820'},
+    {id:'b5',title:'Urban Weave',sub:'Ballpoint on canvas paper · 2024',tag:'Abstract',img:'https://picsum.photos/id/1043/600/700'},
+    {id:'b6',title:'The Elder',sub:'Biro stipple · 2022',tag:'Portrait',img:'https://picsum.photos/id/1013/600/860'},
+    {id:'b7',title:'River Dance',sub:'Ballpoint · 2024',tag:'Scene',img:'https://picsum.photos/id/1040/600/750'},
+    {id:'b8',title:'Geometric Soul',sub:'Blue biro on white · 2023',tag:'Abstract',img:'https://picsum.photos/id/1050/600/780'},
+    {id:'b9',title:'The Dreamer',sub:'Biro on brown paper · 2024',tag:'Portrait',img:'https://picsum.photos/id/1025/600/900'},
+    {id:'b10',title:'Crosshatch City',sub:'Biro architectural study · 2023',tag:'Scene',img:'https://picsum.photos/id/1060/600/720'},
+  ],
+  digital: [
+    {id:'d1',title:'Celestial Circuit',sub:'Digital · Procreate · 2024',tag:'Abstract',img:'https://picsum.photos/id/201/600/750'},
+    {id:'d2',title:'Sacred Pulse',sub:'Digital painting · 2024',tag:'Spiritual',img:'https://picsum.photos/id/167/600/860'},
+    {id:'d3',title:'Neon Ancestor',sub:'Digital mixed media · 2023',tag:'Portrait',img:'https://picsum.photos/id/250/600/800'},
+    {id:'d4',title:'Data Garden',sub:'Generative art · 2024',tag:'Abstract',img:'https://picsum.photos/id/180/600/780'},
+    {id:'d5',title:'Divine Signal',sub:'Digital · After Effects · 2024',tag:'Spiritual',img:'https://picsum.photos/id/193/600/900'},
+    {id:'d6',title:'Lagos at Light',sub:'Digital cityscape · 2023',tag:'Scene',img:'https://picsum.photos/id/325/600/720'},
+    {id:'d7',title:'The Algorithm',sub:'Generative · p5.js · 2024',tag:'Abstract',img:'https://picsum.photos/id/338/600/840'},
+    {id:'d8',title:'Pixel Ritual',sub:'Digital painting · 2024',tag:'Spiritual',img:'https://picsum.photos/id/289/600/760'},
+    {id:'d9',title:'Afrofuture I',sub:'Digital collage · 2023',tag:'Portrait',img:'https://picsum.photos/id/301/600/880'},
+    {id:'d10',title:'Holy Geometry',sub:'Digital sacred art · 2024',tag:'Spiritual',img:'https://picsum.photos/id/342/600/730'},
+    {id:'d11',title:'Chrome Dreams',sub:'3D render · Blender · 2024',tag:'Abstract',img:'https://picsum.photos/id/355/600/800'},
+    {id:'d12',title:'The Oracle',sub:'Digital portrait · 2024',tag:'Portrait',img:'https://picsum.photos/id/375/600/860'},
+  ]
+};
+
+const BIRO_TAGS   = ['All','Portrait','Abstract','Scene'];
+const DIGITAL_TAGS= ['All','Portrait','Abstract','Spiritual','Scene'];
+
+let galleryTab = 'biro';
+let galleryFilter = 'All';
+let lbItems = [], lbIdx = 0;
+
+/* ══════════ GALLERY OPEN/CLOSE ══════════ */
+function openGallery(){
+  document.getElementById('gallery-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderGallerySubPills();
+  renderGalleryGrid();
+}
+function closeGallery(){
+  document.getElementById('gallery-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ══════════ GALLERY TABS ══════════ */
+function switchGalleryTab(tab){
+  galleryTab = tab;
+  galleryFilter = 'All';
+  document.getElementById('gtab-biro').classList.toggle('active', tab==='biro');
+  document.getElementById('gtab-digital').classList.toggle('active', tab==='digital');
+  renderGallerySubPills();
+  renderGalleryGrid();
+}
+
+/* ══════════ GALLERY SUB-PILLS ══════════ */
+function renderGallerySubPills(){
+  const tags = galleryTab==='biro' ? BIRO_TAGS : DIGITAL_TAGS;
+  document.getElementById('gallery-sub-pills').innerHTML = tags.map(t=>`
+    <button class="g-pill ${t===galleryFilter?'active':''}" onclick="setGalleryFilter('${t}')">${t}</button>
+  `).join('');
+}
+
+function setGalleryFilter(tag){
+  galleryFilter = tag;
+  renderGallerySubPills();
+  renderGalleryGrid();
+}
+
+/* ══════════ GALLERY GRID ══════════ */
+function renderGalleryGrid(){
+  const items = GALLERY[galleryTab];
+  const filtered = galleryFilter==='All' ? items : items.filter(i=>i.tag===galleryFilter);
+  lbItems = filtered;
+
+  const grid = document.getElementById('gallery-grid');
+  if(!filtered.length){
+    grid.innerHTML = '<div class="gallery-empty"><i class="fa-solid fa-image"></i><p>No artworks in this category yet.</p></div>';
+    return;
+  }
+
+  // Alternate heights for masonry feel
+  grid.innerHTML = filtered.map((item, idx) => {
+    const heights = ['auto','auto','auto'];
+    return `
+    <div class="masonry-item" onclick="openLightbox(${idx})" style="animation:fadeUp .4s ${idx*40}ms both">
+      <img src="${item.img}" alt="${item.title}" loading="lazy" style="aspect-ratio:${idx%3===1?'3/4':idx%3===2?'1/1':'3/5'}">
+      <div class="masonry-item-badge">${item.tag}</div>
+      <div class="masonry-item-overlay">
+        <div class="masonry-item-title">${item.title}</div>
+        <div class="masonry-item-tag">${item.sub}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════ LIGHTBOX ══════════ */
+function openLightbox(idx){
+  lbIdx = idx;
+  renderLightboxSlide();
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+}
+function renderLightboxSlide(){
+  const item = lbItems[lbIdx];
+  if(!item) return;
+  const img = document.getElementById('lb-img');
+  img.src = item.img;
+  img.alt = item.title;
+  document.getElementById('lb-title').textContent = item.title;
+  document.getElementById('lb-sub').textContent = item.sub;
+  document.getElementById('lb-counter').textContent = `${lbIdx+1} / ${lbItems.length}`;
+}
+function lbNav(dir){
+  const img = document.getElementById('lb-img');
+  img.classList.add(dir===-1 ? 'slide-out-right' : 'slide-out-left');
+  setTimeout(()=>{
+    lbIdx = (lbIdx + dir + lbItems.length) % lbItems.length;
+    img.classList.remove('slide-out-left','slide-out-right');
+    renderLightboxSlide();
+  }, 200);
+}
+// Swipe support for lightbox
+(function(){
+  let sx=0;
+  document.getElementById('lightbox')?.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+  document.getElementById('lightbox')?.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>50) lbNav(dx<0?1:-1);
+  },{passive:true});
+})();
+// Keyboard nav in lightbox
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('lightbox').classList.contains('open')){
+    if(e.key==='ArrowLeft') lbNav(-1);
+    if(e.key==='ArrowRight') lbNav(1);
+    if(e.key==='Escape') closeLightbox();
+  } else if(document.getElementById('gallery-modal').classList.contains('open')){
+    if(e.key==='Escape') closeGallery();
+  } else {
+    if(e.key==='Escape') closeAll();
+  }
+});
+
+/* ══════════ FADE UP KEYFRAME ══════════ */
+const styleEl = document.createElement('style');
+styleEl.textContent = `@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}`;
+document.head.appendChild(styleEl);
+
 /* ══════════ SCROLL TOP ══════════ */
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
-
-/* ══════════ KEYBOARD ESC ══════════ */
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll();});
 
 /* ══════════ INIT ══════════ */
 renderStoryStrip();
