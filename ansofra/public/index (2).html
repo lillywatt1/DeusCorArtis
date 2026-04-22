@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DeusCorArtis • Divine Art for the Soul</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+<style>
+/* ─── TOKENS ─── */
+:root{
+  --white:#ffffff;
+  --bg:#f7f4f0;
+  --surface:#ffffff;
+  --ink:#1c1009;
+  --ink2:#5a4a3a;
+  --border:#e8e0d6;
+  --gold:#c8860a;
+  --gold-lt:#f5a623;
+  --gold-bg:#fff8ec;
+  --rust:#b84a2e;
+  --pill-bg:#f0ebe4;
+  --pill-act:#1c1009;
+  --pill-act-txt:#fff;
+  --radius-card:14px;
+  --radius-pill:999px;
+  --shadow-card:0 2px 12px rgba(28,16,9,.08);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --font-display:'Fraunces',Georgia,serif;
+  --font-ui:'DM Sans',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.5;min-height:100vh;overflow-x:hidden}
+img{display:block;width:100%;object-fit:cover}
+button{cursor:pointer;background:none;border:none;color:inherit;font-family:inherit}
+a{text-decoration:none;color:inherit}
+input{font-family:inherit}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ─── MAX WIDTH WRAPPER ─── */
+.page{max-width:520px;margin:0 auto;background:var(--white);min-height:100vh;position:relative;box-shadow:0 0 40px rgba(0,0,0,.1)}
+
+/* ─── TOP NAV ─── */
+.top-nav{
+  position:sticky;top:0;z-index:300;
+  background:var(--white);
+  border-bottom:1.5px solid var(--border);
+  padding:12px 16px 10px;
+}
+.top-nav-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.brand{display:flex;align-items:center;gap:8px}
+.brand-mark{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:16px;flex-shrink:0;
+  font-family:var(--font-display);font-weight:700
+}
+.brand-name{font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--gold);letter-spacing:-.01em}
+.nav-icons{display:flex;align-items:center;gap:4px}
+.nav-btn{
+  width:38px;height:38px;border-radius:var(--radius-pill);
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;color:var(--ink2);
+  transition:background .2s;position:relative
+}
+.nav-btn:hover{background:var(--pill-bg)}
+.nav-badge{
+  position:absolute;top:4px;right:4px;
+  background:var(--rust);color:#fff;
+  font-size:9px;font-weight:700;
+  width:15px;height:15px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  line-height:1
+}
+
+/* Search bar */
+.search-bar{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:var(--radius-pill);
+  padding:9px 16px;transition:border-color .2s
+}
+.search-bar:focus-within{border-color:var(--ink)}
+.search-bar i{color:var(--ink2);font-size:14px;flex-shrink:0}
+.search-bar input{
+  flex:1;background:none;border:none;outline:none;
+  font-size:14px;color:var(--ink);
+}
+.search-bar input::placeholder{color:#b0a090}
+.search-bar .search-go{
+  background:var(--gold);color:#fff;
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;flex-shrink:0;transition:background .2s
+}
+.search-bar .search-go:hover{background:var(--gold-lt)}
+
+/* ─── CATEGORY PILLS ─── */
+.pills-wrap{
+  overflow-x:auto;white-space:nowrap;
+  padding:12px 16px;border-bottom:1.5px solid var(--border);
+  scrollbar-width:none;background:var(--white)
+}
+.pills-wrap::-webkit-scrollbar{display:none}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:600;letter-spacing:.03em;
+  padding:7px 16px;border-radius:var(--radius-pill);
+  border:1.5px solid var(--border);color:var(--ink2);
+  background:var(--white);margin-right:8px;
+  transition:all .2s;cursor:pointer;white-space:nowrap
+}
+.pill.active{background:var(--pill-act);color:var(--pill-act-txt);border-color:var(--pill-act)}
+.pill:hover:not(.active){background:var(--pill-bg)}
+
+/* ─── PROMO BANNER ─── */
+.promo-banner{
+  margin:16px;border-radius:var(--radius-card);
+  overflow:hidden;position:relative;
+  background:linear-gradient(135deg,#1c1009 0%,#3a2010 60%,#5a3515 100%);
+  min-height:160px;display:flex;align-items:flex-end
+}
+.promo-bg-img{
+  position:absolute;inset:0;
+  background:url('https://picsum.photos/id/1015/900/500') center/cover no-repeat;
+  opacity:.28;filter:saturate(.6)
+}
+.promo-content{position:relative;padding:20px;width:100%}
+.promo-tag{
+  display:inline-block;
+  font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  background:var(--gold);color:#fff;padding:4px 10px;border-radius:var(--radius-pill);
+  margin-bottom:8px
+}
+.promo-title{
+  font-family:var(--font-display);font-size:22px;font-weight:700;
+  color:#fff;line-height:1.1;margin-bottom:10px
+}
+.promo-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  background:#fff;color:var(--ink);
+  font-size:12px;font-weight:700;letter-spacing:.04em;
+  padding:9px 18px;border-radius:var(--radius-pill);
+  transition:background .2s
+}
+.promo-btn:hover{background:var(--gold-bg)}
+
+/* ─── SECTION HEADERS ─── */
+.sec-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 16px 10px
+}
+.sec-title{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--ink)}
+.sec-link{font-size:12px;font-weight:600;color:var(--gold);display:flex;align-items:center;gap:4px}
+.sec-link i{font-size:10px}
+
+/* ─── STORY STRIP (horizontal scroll) ─── */
+.story-strip{
+  overflow-x:auto;white-space:nowrap;
+  padding:4px 16px 16px;
+  scrollbar-width:none
+}
+.story-strip::-webkit-scrollbar{display:none}
+.story-chip{
+  display:inline-flex;flex-direction:column;
+  width:200px;border-radius:var(--radius-card);
+  overflow:hidden;background:var(--surface);
+  border:1.5px solid var(--border);
+  vertical-align:top;margin-right:12px;
+  cursor:pointer;transition:box-shadow .25s,transform .25s;
+  white-space:normal
+}
+.story-chip:hover{box-shadow:var(--shadow-card);transform:translateY(-3px)}
+.story-chip-img{width:100%;height:120px;object-fit:cover;flex-shrink:0}
+.story-chip-body{padding:10px 12px 12px}
+.story-chip-tag{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.story-chip-title{font-family:var(--font-display);font-size:14px;font-weight:600;line-height:1.25;margin-bottom:4px;color:var(--ink)}
+.story-chip-mins{font-size:11px;color:var(--ink2)}
+
+/* ─── PRODUCT GRID ─── */
+.product-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:12px;padding:4px 16px 16px
+}
+.p-card{
+  background:var(--surface);border-radius:var(--radius-card);
+  overflow:hidden;border:1.5px solid var(--border);
+  cursor:pointer;transition:box-shadow .25s,transform .25s;
+  display:flex;flex-direction:column
+}
+.p-card:hover{box-shadow:0 6px 24px rgba(28,16,9,.12);transform:translateY(-3px)}
+.p-card-img-wrap{position:relative;aspect-ratio:3/4;overflow:hidden;flex-shrink:0}
+.p-card-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.p-card:hover .p-card-img-wrap img{transform:scale(1.06)}
+.p-card-badge{
+  position:absolute;top:8px;left:8px;
+  background:var(--rust);color:#fff;
+  font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 8px;border-radius:var(--radius-pill)
+}
+.p-card-fav{
+  position:absolute;top:8px;right:8px;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.88);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:#ccc;transition:color .2s
+}
+.p-card-fav.liked,.p-card-fav:hover{color:var(--rust)}
+.p-card-body{padding:10px 10px 12px;flex:1;display:flex;flex-direction:column}
+.p-card-title{font-family:var(--font-display);font-size:13px;font-weight:600;line-height:1.3;color:var(--ink);margin-bottom:2px}
+.p-card-artist{font-size:11px;color:var(--ink2);margin-bottom:6px}
+.p-card-price-row{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:4px}
+.p-card-price{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--ink)}
+.p-card-orig{font-size:11px;color:#b0a090;text-decoration:line-through}
+.p-card-disc{font-size:10px;font-weight:700;color:var(--rust)}
+.p-card-add{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--gold);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;transition:background .2s;flex-shrink:0
+}
+.p-card-add:hover{background:var(--gold-lt)}
+
+/* ─── ARTISTS ROW ─── */
+.artists-row{
+  overflow-x:auto;white-space:nowrap;
+  padding:4px 16px 20px;scrollbar-width:none
+}
+.artists-row::-webkit-scrollbar{display:none}
+.a-chip{
+  display:inline-flex;flex-direction:column;align-items:center;
+  width:90px;margin-right:16px;cursor:pointer;vertical-align:top;white-space:normal;
+  text-align:center
+}
+.a-chip-img{
+  width:64px;height:64px;border-radius:50%;
+  border:2.5px solid var(--border);object-fit:cover;
+  transition:border-color .2s,transform .3s
+}
+.a-chip:hover .a-chip-img{border-color:var(--gold);transform:scale(1.06)}
+.a-chip-name{font-size:11px;font-weight:600;color:var(--ink);margin-top:6px;line-height:1.2}
+.a-chip-spec{font-size:10px;color:var(--gold)}
+
+/* ─── BOTTOM NAV (mobile Etsy-style) ─── */
+.bottom-nav{
+  position:sticky;bottom:0;z-index:300;
+  background:var(--white);border-top:1.5px solid var(--border);
+  display:flex;align-items:stretch;
+}
+.bn-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:10px 4px;font-size:10px;font-weight:600;
+  color:var(--ink2);cursor:pointer;transition:color .2s;position:relative
+}
+.bn-item i{font-size:18px}
+.bn-item.active,.bn-item:hover{color:var(--gold)}
+.bn-item .bn-badge{
+  position:absolute;top:6px;right:calc(50% - 20px);
+  background:var(--rust);color:#fff;
+  font-size:8px;font-weight:700;
+  width:14px;height:14px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center
+}
+
+/* ─── EMPTY STATE ─── */
+.empty-state{
+  grid-column:1/-1;
+  padding:48px 24px;text-align:center;
+  font-family:var(--font-display);font-style:italic;
+  font-size:18px;color:var(--ink2)
+}
+
+/* ─── MODALS ─── */
+.veil{
+  position:fixed;inset:0;background:rgba(28,16,9,.7);
+  z-index:500;opacity:0;pointer-events:none;
+  transition:opacity .3s;backdrop-filter:blur(6px)
+}
+.veil.open{opacity:1;pointer-events:all}
+
+/* Product sheet */
+.sheet{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:520px;
+  background:var(--white);border-radius:22px 22px 0 0;
+  z-index:510;transition:transform .4s var(--ease);
+  max-height:92vh;overflow-y:auto;
+  padding-bottom:env(safe-area-inset-bottom)
+}
+.sheet.open{transform:translateX(-50%) translateY(0)}
+.sheet-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 0}
+.sheet-img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.sheet-body{padding:20px}
+.sheet-tag{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sheet-title{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.sheet-artist{font-size:13px;color:var(--ink2);margin-bottom:14px}
+.sheet-divider{height:1px;background:var(--border);margin:14px 0}
+.sheet-story-lbl{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.sheet-desc{font-size:14px;color:var(--ink2);line-height:1.75}
+.sheet-price-row{display:flex;align-items:center;justify-content:space-between;margin-top:20px}
+.sheet-price{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--ink)}
+.sheet-add{
+  display:flex;align-items:center;gap:8px;
+  background:var(--gold);color:#fff;
+  font-size:13px;font-weight:700;letter-spacing:.04em;
+  padding:14px 24px;border-radius:var(--radius-pill);
+  transition:background .2s
+}
+.sheet-add:hover{background:var(--gold-lt)}
+.sheet-note{font-size:11px;color:var(--ink2);text-align:center;margin-top:10px}
+.sheet-x{
+  position:absolute;top:16px;right:16px;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--pill-bg);display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--ink2);z-index:10
+}
+
+/* Story sheet */
+.story-sheet{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:520px;
+  background:var(--white);border-radius:22px 22px 0 0;
+  z-index:520;transition:transform .4s var(--ease);
+  max-height:95vh;overflow-y:auto;
+  padding-bottom:env(safe-area-inset-bottom)
+}
+.story-sheet.open{transform:translateX(-50%) translateY(0)}
+.story-sheet-img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.story-sheet-body{padding:20px 20px 40px}
+.story-sheet-kicker{font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;background:var(--rust);color:#fff;display:inline-block;padding:4px 10px;border-radius:var(--radius-pill);margin-bottom:10px}
+.story-sheet-title{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.1}
+.story-sheet-deck{font-size:15px;font-style:italic;color:var(--ink2);line-height:1.7;border-left:3px solid var(--gold);padding-left:12px;margin-bottom:18px}
+.story-sheet-meta{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.story-sheet-meta img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--border)}
+.story-sheet-author{font-size:12px;font-weight:700;color:var(--ink)}
+.story-sheet-date{font-size:11px;color:var(--ink2)}
+.story-text{font-size:15px;line-height:1.85;color:var(--ink)}
+.story-text p{margin-bottom:18px}
+.story-text .dc::first-letter{font-family:var(--font-display);font-size:3.6em;float:left;line-height:.8;margin-right:7px;color:var(--gold);font-weight:700}
+.story-text blockquote{font-family:var(--font-display);font-size:19px;font-weight:600;border-left:3px solid var(--ink);padding-left:14px;margin:22px 0;color:var(--ink)}
+.story-artwork-inline{margin:22px -20px;border-top:1.5px solid var(--border);border-bottom:1.5px solid var(--border)}
+.story-artwork-inline img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.story-artwork-cap{padding:10px 20px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.story-buy-box{
+  margin:20px 0 0;padding:16px;
+  border:1.5px solid var(--border);border-radius:var(--radius-card);
+  display:flex;align-items:center;gap:14px
+}
+.story-buy-img{width:60px;height:60px;object-fit:cover;border-radius:10px;border:1.5px solid var(--border);flex-shrink:0}
+.story-buy-title{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.story-buy-price{font-size:12px;color:var(--ink2);margin-bottom:8px}
+.story-buy-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--ink);color:#fff;
+  font-size:11px;font-weight:700;letter-spacing:.06em;
+  padding:8px 16px;border-radius:var(--radius-pill);transition:background .2s
+}
+.story-buy-btn:hover{background:var(--gold)}
+.story-prog{height:3px;background:var(--border);position:sticky;top:0;z-index:5}
+.story-prog-fill{height:100%;background:var(--gold);width:0;transition:width .1s}
+
+/* Cart sheet */
+.cart-sheet{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:520px;
+  background:var(--white);border-radius:22px 22px 0 0;
+  z-index:530;transition:transform .4s var(--ease);
+  max-height:92vh;display:flex;flex-direction:column;
+  padding-bottom:env(safe-area-inset-bottom)
+}
+.cart-sheet.open{transform:translateX(-50%) translateY(0)}
+.cart-sheet-head{padding:16px 20px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cart-sheet-head h3{font-family:var(--font-display);font-size:20px;font-weight:700}
+.cart-sheet-body{flex:1;overflow-y:auto;padding:12px 20px}
+.cart-empty{text-align:center;padding:48px 24px;color:var(--ink2)}
+.cart-empty i{font-size:40px;opacity:.2;margin-bottom:10px}
+.cart-empty p{font-style:italic;font-size:15px}
+.c-row{display:flex;gap:12px;padding:14px 0;border-bottom:1.5px solid var(--border)}
+.c-img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex-shrink:0;border:1.5px solid var(--border)}
+.c-title{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.c-artist{font-size:11px;color:var(--ink2);margin-bottom:8px}
+.c-bot{display:flex;align-items:center;justify-content:space-between}
+.qty-wrap{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:var(--radius-pill);overflow:hidden}
+.qty-b{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink2);transition:background .2s}
+.qty-b:hover{background:var(--pill-bg);color:var(--gold)}
+.qty-n{font-size:13px;font-weight:700;padding:0 8px;color:var(--ink)}
+.c-price{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--ink)}
+.c-rm{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#c0a090;transition:color .2s;margin-top:4px;display:block}
+.c-rm:hover{color:var(--rust)}
+.cart-foot{padding:16px 20px;border-top:1.5px solid var(--border)}
+.cart-total-row{display:flex;justify-content:space-between;margin-bottom:14px}
+.cart-total-row span{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.cart-total-row strong{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--ink)}
+.cart-co-btn{
+  width:100%;padding:16px;
+  background:var(--gold);color:#fff;
+  font-size:14px;font-weight:700;letter-spacing:.06em;
+  border-radius:var(--radius-pill);transition:background .2s
+}
+.cart-co-btn:hover{background:var(--gold-lt)}
+
+/* Login sheet */
+.login-sheet{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:520px;
+  background:var(--white);border-radius:22px 22px 0 0;
+  z-index:540;transition:transform .4s var(--ease);
+  padding-bottom:env(safe-area-inset-bottom)
+}
+.login-sheet.open{transform:translateX(-50%) translateY(0)}
+.login-sheet-body{padding:0 20px 28px}
+.login-sheet-title{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.login-sheet-sub{font-size:13px;color:var(--ink2);margin-bottom:20px}
+.l-tabs{display:flex;border-bottom:1.5px solid var(--border);margin-bottom:20px}
+.l-tab{flex:1;padding:12px;text-align:center;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all .2s;cursor:pointer}
+.l-tab.active{color:var(--gold);border-color:var(--gold)}
+.l-field{margin-bottom:14px}
+.l-field label{display:block;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);margin-bottom:6px}
+.l-field input{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:12px 16px;font-size:15px;color:var(--ink);outline:none;transition:border-color .2s;background:transparent}
+.l-field input:focus{border-color:var(--ink)}
+.l-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.l-submit{width:100%;padding:15px;background:var(--ink);color:#fff;font-size:13px;font-weight:700;letter-spacing:.06em;border-radius:var(--radius-pill);margin-top:6px;transition:background .2s}
+.l-submit:hover{background:var(--gold)}
+.l-switch{text-align:center;font-size:12px;color:var(--ink2);margin-top:12px}
+.l-switch span{color:var(--gold);font-weight:700;cursor:pointer}
+
+/* Toast */
+#toasts{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9000;width:100%;max-width:480px;padding:0 16px;pointer-events:none}
+.toast{
+  background:var(--ink);color:#fff;
+  padding:12px 18px;border-radius:var(--radius-pill);
+  font-size:13px;font-weight:500;
+  display:flex;align-items:center;gap:9px;
+  margin-bottom:8px;
+  animation:tIn .35s var(--ease);border-left:3px solid var(--gold)
+}
+.toast i{color:var(--gold-lt)}
+.toast.out{animation:tOut .3s ease forwards}
+@keyframes tIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(10px)}}
+
+/* Divider */
+.sec-divider{height:8px;background:var(--bg);margin:0}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─── TOP NAV ─── -->
+  <header class="top-nav">
+    <div class="top-nav-row1">
+      <div class="brand">
+        <div class="brand-mark">D</div>
+        <span class="brand-name">DeusCorArtis</span>
+      </div>
+      <div class="nav-icons">
+        <button class="nav-btn" onclick="openLogin()" title="Account"><i class="fa-regular fa-user"></i></button>
+        <button class="nav-btn" onclick="openCart()" title="Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="nav-badge" id="cart-badge">0</span>
+        </button>
+        <button class="nav-btn" onclick="openMobileMenu()" title="Menu"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="search-input" placeholder="Search artworks, stories, artists…" onkeyup="handleSearch()">
+      <button class="search-go" onclick="handleSearch()"><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+  </header>
+
+  <!-- ─── CATEGORY PILLS ─── -->
+  <div class="pills-wrap" id="pills-wrap">
+    <button class="pill active" data-cat="all" onclick="setCategory(this,'all')">✦ All</button>
+    <button class="pill" data-cat="stories" onclick="setCategory(this,'stories')"><i class="fa-regular fa-book-open"></i> Stories</button>
+    <button class="pill" data-cat="oil" onclick="setCategory(this,'oil')">Oil Paintings</button>
+    <button class="pill" data-cat="frame" onclick="setCategory(this,'frame')">Framed Prints</button>
+    <button class="pill" data-cat="acrylic" onclick="setCategory(this,'acrylic')">Acrylic</button>
+    <button class="pill" data-cat="digital" onclick="setCategory(this,'digital')">Digital</button>
+    <button class="pill" data-cat="sculpture" onclick="setCategory(this,'sculpture')">Sculpture</button>
+  </div>
+
+  <!-- ─── MAIN CONTENT ─── -->
+  <main id="main-content">
+
+    <!-- Promo Banner -->
+    <div class="promo-banner" id="promo-banner" onclick="openStory(0)">
+      <div class="promo-bg-img"></div>
+      <div class="promo-content">
+        <div class="promo-tag">Editor's Pick · April 2026</div>
+        <div class="promo-title">Plan the perfect<br>divine collection</div>
+        <button class="promo-btn"><i class="fa-regular fa-book-open"></i> Read the story</button>
+      </div>
+    </div>
+
+    <!-- Stories Strip -->
+    <div id="stories-section">
+      <div class="sec-head">
+        <div class="sec-title">Artist Stories</div>
+        <div class="sec-link" onclick="setCategory(document.querySelector('[data-cat=stories]'),'stories')">See all <i class="fa-solid fa-chevron-right"></i></div>
+      </div>
+      <div class="story-strip" id="story-strip"></div>
+    </div>
+
+    <div class="sec-divider"></div>
+
+    <!-- Artists -->
+    <div class="sec-head">
+      <div class="sec-title">Our Artists</div>
+    </div>
+    <div class="artists-row" id="artists-row"></div>
+
+    <div class="sec-divider"></div>
+
+    <!-- Products -->
+    <div class="sec-head">
+      <div class="sec-title" id="grid-title">Art Collection</div>
+      <div class="sec-link" id="grid-count" style="color:var(--ink2);font-size:11px"></div>
+    </div>
+    <div class="product-grid" id="product-grid"></div>
+
+  </main>
+
+  <!-- ─── BOTTOM NAV ─── -->
+  <nav class="bottom-nav">
+    <div class="bn-item active" onclick="scrollToTop()">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </div>
+    <div class="bn-item" onclick="setCategory(document.querySelector('[data-cat=stories]'),'stories')">
+      <i class="fa-regular fa-book-open"></i>
+      <span>Stories</span>
+    </div>
+    <div class="bn-item" onclick="setCategory(document.querySelector('[data-cat=all]'),'all')">
+      <i class="fa-solid fa-palette"></i>
+      <span>Shop</span>
+    </div>
+    <div class="bn-item" onclick="openCart()">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span>Cart</span>
+      <span class="bn-badge" id="bn-badge" style="display:none">0</span>
+    </div>
+    <div class="bn-item" onclick="openLogin()">
+      <i class="fa-regular fa-user"></i>
+      <span>Account</span>
+    </div>
+  </nav>
+
+</div><!-- /page -->
+
+<!-- ─── BACKDROP VEIL ─── -->
+<div class="veil" id="veil" onclick="closeAll()"></div>
+
+<!-- ─── PRODUCT SHEET ─── -->
+<div class="sheet" id="prod-sheet">
+  <div class="sheet-handle"></div>
+  <button class="sheet-x" onclick="closeProdSheet()">✕</button>
+  <img class="sheet-img" id="sh-img" src="" alt="">
+  <div class="sheet-body">
+    <div class="sheet-tag" id="sh-cat"></div>
+    <div class="sheet-title" id="sh-title"></div>
+    <div class="sheet-artist" id="sh-artist"></div>
+    <div class="sheet-divider"></div>
+    <div class="sheet-story-lbl">The Story Behind the Work</div>
+    <div class="sheet-desc" id="sh-desc"></div>
+    <div class="sheet-price-row">
+      <span class="sheet-price" id="sh-price"></span>
+      <button class="sheet-add" onclick="addCurrent()"><i class="fa-solid fa-bag-shopping"></i> Add to Cart</button>
+    </div>
+    <p class="sheet-note">Free shipping · Authenticity certificate · 30-day return</p>
+  </div>
+</div>
+
+<!-- ─── STORY SHEET ─── -->
+<div class="story-sheet" id="story-sheet">
+  <div class="story-prog"><div class="story-prog-fill" id="story-prog-fill"></div></div>
+  <div class="sheet-handle" style="position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:5"></div>
+  <button class="sheet-x" onclick="closeStorySheet()">✕</button>
+  <img class="story-sheet-img" id="ss-img" src="" alt="">
+  <div class="story-sheet-body">
+    <div class="story-sheet-kicker" id="ss-kicker"></div>
+    <h2 class="story-sheet-title" id="ss-title"></h2>
+    <p class="story-sheet-deck" id="ss-deck"></p>
+    <div class="story-sheet-meta">
+      <img id="ss-auth-img" src="" alt="">
+      <div>
+        <div class="story-sheet-author" id="ss-auth"></div>
+        <div class="story-sheet-date" id="ss-date"></div>
+      </div>
+    </div>
+    <div class="story-text" id="ss-text"></div>
+    <div class="story-buy-box" id="ss-buy" style="display:none">
+      <img class="story-buy-img" id="ss-buy-img" src="" alt="">
+      <div style="flex:1">
+        <div class="story-buy-title" id="ss-buy-title"></div>
+        <div class="story-buy-price" id="ss-buy-price"></div>
+        <button class="story-buy-btn" id="ss-buy-btn"><i class="fa-solid fa-bag-shopping"></i> View &amp; Buy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CART SHEET ─── -->
+<div class="cart-sheet" id="cart-sheet">
+  <div class="cart-sheet-head">
+    <div class="sheet-handle" style="position:absolute;top:8px;left:50%;transform:translateX(-50%)"></div>
+    <h3>Your Cart</h3>
+    <button class="sheet-x" style="position:static;background:none;width:auto;height:auto;font-size:20px;color:var(--ink2)" onclick="closeCartSheet()">✕</button>
+  </div>
+  <div class="cart-sheet-body" id="cart-body"></div>
+  <div class="cart-foot" id="cart-foot" style="display:none">
+    <div class="cart-total-row">
+      <span>Subtotal</span>
+      <strong id="cart-total">₦0</strong>
+    </div>
+    <button class="cart-co-btn" onclick="checkout()">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- ─── LOGIN SHEET ─── -->
+<div class="login-sheet" id="login-sheet">
+  <div class="sheet-handle" style="margin:12px auto 0"></div>
+  <button class="sheet-x" onclick="closeLoginSheet()">✕</button>
+  <div class="login-sheet-body" style="padding-top:20px">
+    <div class="login-sheet-title" id="login-title">Welcome Back</div>
+    <div class="login-sheet-sub">Sign in to collect stories &amp; art</div>
+    <div class="l-tabs">
+      <div class="l-tab active" id="lt0" onclick="switchLoginTab(0)">Sign In</div>
+      <div class="l-tab" id="lt1" onclick="switchLoginTab(1)">Create Account</div>
+    </div>
+    <!-- Sign In -->
+    <div id="lf0">
+      <div class="l-field"><label>Email</label><input type="email" id="li-email" placeholder="you@example.com"></div>
+      <div class="l-field"><label>Password</label><input type="password" id="li-pass" placeholder="••••••••"></div>
+      <button class="l-submit" onclick="doLogin()">Sign In</button>
+      <p class="l-switch">No account? <span onclick="switchLoginTab(1)">Create one</span></p>
+    </div>
+    <!-- Sign Up -->
+    <div id="lf1" style="display:none">
+      <div class="l-row">
+        <div class="l-field"><label>First Name</label><input type="text" id="su-first"></div>
+        <div class="l-field"><label>Last Name</label><input type="text" id="su-last"></div>
+      </div>
+      <div class="l-field"><label>Email</label><input type="email" id="su-email" placeholder="you@example.com"></div>
+      <div class="l-field"><label>Password</label><input type="password" id="su-pass" placeholder="Strong password"></div>
+      <button class="l-submit" onclick="doSignup()">Create Account</button>
+      <p class="l-switch">Have account? <span onclick="switchLoginTab(0)">Sign in</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toasts"></div>
+
+<script>
+/* ══════════ DATA ══════════ */
+const STORIES = [
+  {id:0,tag:"Artist Journal",title:"The Day the Canvas Spoke",mins:"12 min",image:"https://picsum.photos/id/1015/800/600",authorImg:"https://picsum.photos/id/1011/80/80",author:"Adebayo Olumide",date:"April 2, 2026",kicker:"Artist Journal",deck:"The brush moved before I did. This is not a metaphor.",linkedProduct:0,
+  body:`<p class="dc">It was 3am when I walked into my studio and understood, for the first time in my life, that I was not alone in the room. The canvas stood there — already primed, already waiting — and something in the air told me that tonight was not for sleeping.</p><p>I had been working on what would become <em>Eternal Flame</em> for three months. Seven layers of oil, gesso, and more failures than I could count.</p><blockquote>"I was merely the vessel. The painting had its own will."</blockquote><p>But that night, something shifted. I picked up the brush and my hand moved without instruction. The gold leaf folded perfectly.</p><div class="story-artwork-inline"><img src="https://picsum.photos/id/1015/900/600" alt="detail"><div class="story-artwork-cap">Eternal Flame · Oil and gold leaf · 2026 · Adebayo Olumide</div></div><p>Some artworks are made. Others arrive. This one arrived. All I did was hold the brush and try not to get in the way.</p>`},
+  {id:1,tag:"Sacred Process",title:"Bronze That Remembers",mins:"9 min",image:"https://picsum.photos/id/1005/800/600",authorImg:"https://picsum.photos/id/1005/80/80",author:"Fatima Nkemdilim",date:"March 28, 2026",kicker:"Sacred Process",deck:"Metal carries memory. My ancestors taught me this.",linkedProduct:3,
+  body:`<p class="dc">Before every pour, I say their names. All of them — every ancestor I know, and the ones whose names were lost to time. I speak into the fire, into the liquid bronze.</p><p>This is not superstition. This is methodology.</p><blockquote>"The bronze holds the names. Collectors tell me the room changes."</blockquote><div class="story-artwork-inline"><img src="https://picsum.photos/id/1005/900/600" alt="Bronze"><div class="story-artwork-cap">Heart of the Ancestors · Bronze · 65cm · Jos, Nigeria</div></div><p>The sculpture stands 65cm tall. Every collector reports the same thing: an unusual quiet in the room. That silence is the ancestors, still listening.</p>`},
+  {id:2,tag:"Digital Sacred",title:"When Pixels Become Prayer",mins:"15 min",image:"https://picsum.photos/id/201/800/600",authorImg:"https://picsum.photos/id/1009/80/80",author:"Chinedu Eze",date:"March 15, 2026",kicker:"Digital Sacred",deck:"Every frame is a prayer. I just translate.",linkedProduct:2,
+  body:`<p class="dc">The first mural I painted was on a crumbling wall in Surulere in 2014. A face — enormous, maybe five metres tall — staring out at traffic. People stopped.</p><blockquote>"Sacred geometry is mathematics that remembers it has a soul."</blockquote><div class="story-artwork-inline"><img src="https://picsum.photos/id/201/900/600" alt="Digital Divine"><div class="story-artwork-cap">Divine Reflection · Digital Print 1/50 · Sacred Geometry · 2026</div></div><p>I told a collector in London: "You're not buying a print. You're buying a 500-year conversation." She cried. I understood.</p>`},
+  {id:3,tag:"Acrylic Stories",title:"Colour is a Language I Had to Learn",mins:"8 min",image:"https://picsum.photos/id/338/800/600",authorImg:"https://picsum.photos/id/338/80/80",author:"Zainab Musa",date:"March 10, 2026",kicker:"Acrylic Stories",deck:"I did not speak until I was six. By seven, I was painting what I couldn't say.",linkedProduct:5,
+  body:`<p class="dc">Language came late for me. Words arrived slowly, reluctantly. But colour — colour arrived immediately. Acrylic is honest. It dries fast. It commits.</p><blockquote>"The women in my paintings are never named. They are every woman."</blockquote><div class="story-artwork-inline"><img src="https://picsum.photos/id/120/900/600" alt="Celestial Veil"><div class="story-artwork-cap">Celestial Veil · Acrylic Triptych · Lagos · 2026</div></div><p>The veil in the painting is not mourning. It is a door. My grandmother is on the other side, still laughing at something I probably said.</p>`},
+  {id:4,tag:"Dawn Series",title:"Twenty-One Dawns",mins:"6 min",image:"https://picsum.photos/id/1016/800/600",authorImg:"https://picsum.photos/id/1011/80/80",author:"Adebayo Olumide",date:"Feb 28, 2026",kicker:"Dawn Series",deck:"I painted at 5am for 21 days straight to capture one moment.",linkedProduct:4,
+  body:`<p class="dc">I set my alarm for 4:45am for twenty-one consecutive days. The light between 5:03am and 5:18am in Abuja in February is unlike anything I have ever seen — a rose gold that exists for minutes and then is gone forever.</p><blockquote>"By the fifth morning, I stopped fighting the light and started listening."</blockquote><div class="story-artwork-inline"><img src="https://picsum.photos/id/1016/900/600" alt="Dawn of Grace"><div class="story-artwork-cap">Dawn of Grace · Oil on canvas · Abuja, 5:11am · February 2026</div></div><p>Dawn of Grace is the twenty-first attempt. The others are destroyed. This is what survived.</p>`},
+  {id:5,tag:"Between Worlds",title:"The Hidden Map of Heaven",mins:"11 min",image:"https://picsum.photos/id/120/800/600",authorImg:"https://picsum.photos/id/1005/80/80",author:"Fatima Nkemdilim",date:"Feb 14, 2026",kicker:"Between Worlds",deck:"Turn off the lights and the hidden universe appears.",linkedProduct:5,
+  body:`<p class="dc">There is a version of the night sky mapped by Yoruba astronomers in the 17th century and never published in any Western journal. I found it in a manuscript in my great-uncle's home in Ibadan.</p><blockquote>"Understanding is one way of knowing. Painting is another. Sometimes painting is faster."</blockquote><div class="story-artwork-inline"><img src="https://picsum.photos/id/120/900/600" alt="Celestial Veil UV"><div class="story-artwork-cap">Celestial Veil · UV constellation overlay visible · 2026</div></div><p>Two collectors shone a UV torch on the panels and wept. I consider those letters my most important art reviews.</p>`}
+];
+
+const PRODUCTS = [
+  {id:0,title:"Eternal Flame",artist:"Adebayo Olumide",cat:"oil",price:1250000,origPrice:1500000,badge:"Original",image:"https://picsum.photos/id/1015/600/800",desc:"Breathtaking oil painting — the sacred fire that burns within every soul. Gold leaf applied by hand, 7 months in the making."},
+  {id:1,title:"Whispers of the Cosmos",artist:"Fatima Nkemdilim",cat:"acrylic",price:850000,origPrice:null,badge:"",image:"https://picsum.photos/id/133/600/800",desc:"Acrylic on canvas inspired by Yoruba creation myth. UV elements reveal hidden star constellations under ultraviolet light."},
+  {id:2,title:"Divine Reflection",artist:"Chinedu Eze",cat:"digital",price:450000,origPrice:600000,badge:"1 of 50",image:"https://picsum.photos/id/201/600/800",desc:"Limited edition digital print (1/50). Sacred geometry encoded with 300 layers of meaning. NFT certificate included."},
+  {id:3,title:"Heart of the Ancestors",artist:"Zainab Musa",cat:"sculpture",price:2100000,origPrice:null,badge:"Sculpture",image:"https://picsum.photos/id/1005/600/800",desc:"Bronze sculpture 65cm. Hand-cast in Jos. Incorporates a 400-year-old Igbo libation ritual. Provenance docs included."},
+  {id:4,title:"Dawn of Grace",artist:"Adebayo Olumide",cat:"oil",price:980000,origPrice:1200000,badge:"",image:"https://picsum.photos/id/1016/600/800",desc:"Oil on canvas — rose-gold light of a February dawn in Abuja. Painted at 5am over 21 consecutive mornings."},
+  {id:5,title:"Celestial Veil",artist:"Fatima Nkemdilim",cat:"acrylic",price:675000,origPrice:null,badge:"Triptych",image:"https://picsum.photos/id/120/600/800",desc:"Three-panel acrylic encoding a 17th-century Yoruba star chart in UV-reactive paint. Hidden lines appear under UV light."},
+  {id:6,title:"Sacred Geometry I",artist:"Chinedu Eze",cat:"frame",price:280000,origPrice:350000,badge:"Framed",image:"https://picsum.photos/id/167/600/800",desc:"Museum-quality framed giclée print. Ebony frame, UV glass. Limited edition 1/30. Certificate included."},
+  {id:7,title:"Ancestral Voices",artist:"Zainab Musa",cat:"frame",price:195000,origPrice:240000,badge:"Framed",image:"https://picsum.photos/id/250/600/800",desc:"Framed acrylic on board. Solid wood floating frame. Ready to hang. Artist's handwritten story card included."},
+];
+
+const ARTISTS = [
+  {name:"Adebayo Olumide",spec:"Oil & Gold Leaf",img:"https://picsum.photos/id/1011/120/120",story:0},
+  {name:"Fatima Nkemdilim",spec:"Bronze & Acrylic",img:"https://picsum.photos/id/1005/120/120",story:1},
+  {name:"Chinedu Eze",spec:"Digital",img:"https://picsum.photos/id/1009/120/120",story:2},
+  {name:"Zainab Musa",spec:"Acrylic",img:"https://picsum.photos/id/338/120/120",story:3},
+];
+
+/* ══════════ STATE ══════════ */
+let cart=[], curProduct=null, curCat='all', liked=new Set();
+
+/* ══════════ RENDER: STORIES STRIP ══════════ */
+function renderStoryStrip(){
+  document.getElementById('story-strip').innerHTML = STORIES.map(s=>`
+    <div class="story-chip" onclick="openStory(${s.id})">
+      <img class="story-chip-img" src="${s.image}" alt="${s.title}" loading="lazy">
+      <div class="story-chip-body">
+        <div class="story-chip-tag">${s.tag}</div>
+        <div class="story-chip-title">${s.title}</div>
+        <div class="story-chip-mins"><i class="fa-regular fa-clock" style="margin-right:3px"></i>${s.mins}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ══════════ RENDER: ARTISTS ══════════ */
+function renderArtists(){
+  document.getElementById('artists-row').innerHTML = ARTISTS.map(a=>`
+    <div class="a-chip" onclick="openStory(${a.story})">
+      <img class="a-chip-img" src="${a.img}" alt="${a.name}" loading="lazy">
+      <div class="a-chip-name">${a.name.split(' ')[0]}</div>
+      <div class="a-chip-spec">${a.spec}</div>
+    </div>
+  `).join('');
+}
+
+/* ══════════ RENDER: PRODUCT GRID ══════════ */
+function renderGrid(list){
+  const g = document.getElementById('product-grid');
+  document.getElementById('grid-count').textContent = list.length+' items';
+  if(!list.length){g.innerHTML='<div class="empty-state">No artworks found</div>';return;}
+  g.innerHTML = list.map(p=>{
+    const disc = p.origPrice ? Math.round((1-p.price/p.origPrice)*100) : 0;
+    const isLiked = liked.has(p.id);
+    return `
+    <div class="p-card" onclick="openProduct(${p.id})">
+      <div class="p-card-img-wrap">
+        <img src="${p.image}" alt="${p.title}" loading="lazy">
+        ${p.badge?`<div class="p-card-badge">${p.badge}</div>`:''}
+        <button class="p-card-fav ${isLiked?'liked':''}" onclick="event.stopPropagation();toggleLike(${p.id},this)">
+          <i class="fa-${isLiked?'solid':'regular'} fa-heart"></i>
+        </button>
+      </div>
+      <div class="p-card-body">
+        <div class="p-card-title">${p.title}</div>
+        <div class="p-card-artist">${p.artist}</div>
+        <div class="p-card-price-row">
+          <div>
+            <div class="p-card-price">₦${p.price.toLocaleString()}</div>
+            ${p.origPrice?`<div class="p-card-orig">₦${p.origPrice.toLocaleString()}</div>`:''}
+            ${disc?`<div class="p-card-disc">${disc}% off</div>`:''}
+          </div>
+          <button class="p-card-add" onclick="event.stopPropagation();quickAdd(${p.id})">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════ CATEGORY / SEARCH FILTER ══════════ */
+function setCategory(btn, cat){
+  curCat = cat;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  applyFilters(cat, q);
+  // hide/show story section
+  const ss = document.getElementById('stories-section');
+  if(cat==='stories'){showStoriesView();return;}
+  else{ss.style.display='block';}
+  document.getElementById('grid-title').textContent =
+    cat==='all'?'Art Collection':cat.charAt(0).toUpperCase()+cat.slice(1);
+  document.getElementById('promo-banner').style.display = cat==='all'?'':'none';
+}
+
+function showStoriesView(){
+  // show full story cards in grid
+  document.getElementById('promo-banner').style.display='none';
+  document.getElementById('grid-title').textContent='All Stories';
+  const g=document.getElementById('product-grid');
+  document.getElementById('grid-count').textContent=STORIES.length+' stories';
+  g.innerHTML=STORIES.map(s=>`
+    <div class="p-card" onclick="openStory(${s.id})" style="cursor:pointer">
+      <div class="p-card-img-wrap" style="aspect-ratio:3/2">
+        <img src="${s.image}" alt="${s.title}" loading="lazy">
+        <div class="p-card-badge" style="background:var(--gold)">${s.tag}</div>
+      </div>
+      <div class="p-card-body">
+        <div class="p-card-title">${s.title}</div>
+        <div class="p-card-artist">${s.author}</div>
+        <div class="p-card-price-row">
+          <div style="font-size:11px;color:var(--ink2)"><i class="fa-regular fa-clock" style="margin-right:3px"></i>${s.mins} read</div>
+          <button class="p-card-add" style="background:var(--ink)">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function applyFilters(cat, q){
+  let list = PRODUCTS;
+  if(cat!=='all' && cat!=='stories') list=list.filter(p=>p.cat===cat);
+  if(q) list=list.filter(p=>p.title.toLowerCase().includes(q)||p.artist.toLowerCase().includes(q));
+  renderGrid(list);
+}
+
+function handleSearch(){
+  const q=document.getElementById('search-input').value.toLowerCase().trim();
+  applyFilters(curCat,q);
+  if(curCat==='stories' && q){
+    const filtered=STORIES.filter(s=>s.title.toLowerCase().includes(q)||s.author.toLowerCase().includes(q));
+    document.getElementById('grid-count').textContent=filtered.length+' stories';
+    document.getElementById('product-grid').innerHTML=filtered.map(s=>`
+      <div class="p-card" onclick="openStory(${s.id})">
+        <div class="p-card-img-wrap" style="aspect-ratio:3/2"><img src="${s.image}" alt="${s.title}" loading="lazy"><div class="p-card-badge" style="background:var(--gold)">${s.tag}</div></div>
+        <div class="p-card-body"><div class="p-card-title">${s.title}</div><div class="p-card-artist">${s.author}</div><div class="p-card-price-row"><div style="font-size:11px;color:var(--ink2)"><i class="fa-regular fa-clock"></i> ${s.mins}</div><button class="p-card-add" style="background:var(--ink)"><i class="fa-solid fa-arrow-right"></i></button></div></div>
+      </div>`).join('');
+  }
+}
+
+/* ══════════ PRODUCT SHEET ══════════ */
+function openProduct(id){
+  curProduct=PRODUCTS[id]; if(!curProduct)return;
+  document.getElementById('sh-img').src=curProduct.image;
+  document.getElementById('sh-cat').textContent=curProduct.cat.toUpperCase();
+  document.getElementById('sh-title').textContent=curProduct.title;
+  document.getElementById('sh-artist').textContent=curProduct.artist;
+  document.getElementById('sh-desc').textContent=curProduct.desc;
+  document.getElementById('sh-price').textContent='₦'+curProduct.price.toLocaleString();
+  openSheet('prod-sheet');
+}
+function closeProdSheet(){closeSheet('prod-sheet');}
+function addCurrent(){if(!curProduct)return;addToCart(curProduct);closeProdSheet();}
+function quickAdd(id){addToCart(PRODUCTS[id]);}
+
+/* ══════════ STORY SHEET ══════════ */
+function openStory(id){
+  const s=STORIES[id]; if(!s)return;
+  document.getElementById('ss-img').src=s.image;
+  document.getElementById('ss-kicker').textContent=s.kicker;
+  document.getElementById('ss-title').textContent=s.title;
+  document.getElementById('ss-deck').textContent=s.deck;
+  document.getElementById('ss-auth-img').src=s.authorImg;
+  document.getElementById('ss-auth').textContent=s.author;
+  document.getElementById('ss-date').textContent=s.date+' · '+s.mins+' read';
+  document.getElementById('ss-text').innerHTML=s.body;
+  const buy=document.getElementById('ss-buy');
+  if(s.linkedProduct!==undefined){
+    const p=PRODUCTS[s.linkedProduct];
+    document.getElementById('ss-buy-img').src=p.image;
+    document.getElementById('ss-buy-title').textContent=p.title;
+    document.getElementById('ss-buy-price').textContent='₦'+p.price.toLocaleString()+' · '+p.cat;
+    document.getElementById('ss-buy-btn').onclick=()=>{closeStorySheet();openProduct(p.id);};
+    buy.style.display='flex';
+  } else {buy.style.display='none';}
+  openSheet('story-sheet');
+  const sheet=document.getElementById('story-sheet');
+  sheet.onscroll=()=>{
+    const pct=sheet.scrollTop/(sheet.scrollHeight-sheet.clientHeight)*100;
+    document.getElementById('story-prog-fill').style.width=pct+'%';
+  };
+}
+function closeStorySheet(){closeSheet('story-sheet');}
+
+/* ══════════ CART ══════════ */
+function addToCart(item){
+  const ex=cart.find(c=>c.id===item.id);
+  if(ex)ex.qty++;else cart.push({...item,qty:1});
+  updateBadge();toast('<i class="fa-solid fa-check"></i> '+item.title+' added to cart');
+}
+function updateBadge(){
+  const n=cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cart-badge').textContent=n;
+  const bb=document.getElementById('bn-badge');
+  bb.textContent=n;bb.style.display=n?'flex':'none';
+}
+function openCart(){renderCartSheet();openSheet('cart-sheet');}
+function closeCartSheet(){closeSheet('cart-sheet');}
+function renderCartSheet(){
+  const body=document.getElementById('cart-body'),foot=document.getElementById('cart-foot');
+  if(!cart.length){
+    body.innerHTML='<div class="cart-empty"><i class="fa-solid fa-bag-shopping"></i><p>Your cart is empty</p></div>';
+    foot.style.display='none';return;
+  }
+  let total=0;
+  body.innerHTML=cart.map((item,i)=>{const sub=item.price*item.qty;total+=sub;return`
+    <div class="c-row">
+      <img class="c-img" src="${item.image}" alt="${item.title}">
+      <div style="flex:1">
+        <div class="c-title">${item.title}</div>
+        <div class="c-artist">${item.artist}</div>
+        <div class="c-bot">
+          <div class="qty-wrap">
+            <button class="qty-b" onclick="cqty(${i},-1)">−</button>
+            <span class="qty-n">${item.qty}</span>
+            <button class="qty-b" onclick="cqty(${i},1)">+</button>
+          </div>
+          <span class="c-price">₦${sub.toLocaleString()}</span>
+        </div>
+        <span class="c-rm" onclick="crm(${i})">Remove</span>
+      </div>
+    </div>`;}).join('');
+  document.getElementById('cart-total').textContent='₦'+total.toLocaleString();
+  foot.style.display='block';
+}
+function cqty(i,d){cart[i].qty+=d;if(cart[i].qty<1)cart.splice(i,1);updateBadge();renderCartSheet();}
+function crm(i){cart.splice(i,1);updateBadge();renderCartSheet();}
+function checkout(){const t=cart.reduce((s,i)=>s+i.price*i.qty,0);closeCartSheet();setTimeout(()=>{toast('🎉 Order placed! ₦'+t.toLocaleString()+' (Demo)');cart=[];updateBadge();},300);}
+
+/* ══════════ LIKE ══════════ */
+function toggleLike(id,btn){
+  if(liked.has(id)){liked.delete(id);btn.classList.remove('liked');btn.innerHTML='<i class="fa-regular fa-heart"></i>';}
+  else{liked.add(id);btn.classList.add('liked');btn.innerHTML='<i class="fa-solid fa-heart"></i>';toast('<i class="fa-solid fa-heart" style="color:var(--rust)"></i> Saved to favourites');}
+}
+
+/* ══════════ LOGIN ══════════ */
+function openLogin(){openSheet('login-sheet');}
+function closeLoginSheet(){closeSheet('login-sheet');}
+function switchLoginTab(t){
+  document.getElementById('lf0').style.display=t===0?'block':'none';
+  document.getElementById('lf1').style.display=t===1?'block':'none';
+  document.getElementById('lt0').classList.toggle('active',t===0);
+  document.getElementById('lt1').classList.toggle('active',t===1);
+  document.getElementById('login-title').textContent=t===0?'Welcome Back':'Join DeusCorArtis';
+}
+function doLogin(){const e=document.getElementById('li-email').value,p=document.getElementById('li-pass').value;if(!e||!p){toast('⚠ Please fill in all fields');return;}closeLoginSheet();toast('<i class="fa-solid fa-check"></i> Welcome back!');}
+function doSignup(){const f=document.getElementById('su-first').value,e=document.getElementById('su-email').value;if(!f||!e){toast('⚠ Please fill in all fields');return;}closeLoginSheet();toast('🎉 Welcome to the divine family!');}
+
+/* ══════════ MOBILE MENU (simple scroll) ══════════ */
+function openMobileMenu(){toast('<i class="fa-solid fa-info"></i> Use the bottom nav or category pills to explore');}
+
+/* ══════════ SHEET OPEN/CLOSE ══════════ */
+function openSheet(id){
+  document.getElementById('veil').classList.add('open');
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSheet(id){
+  document.getElementById(id).classList.remove('open');
+  // close veil only if no other sheet open
+  const anyOpen=['prod-sheet','story-sheet','cart-sheet','login-sheet'].some(s=>document.getElementById(s).classList.contains('open'));
+  if(!anyOpen){document.getElementById('veil').classList.remove('open');document.body.style.overflow='';}
+}
+function closeAll(){
+  ['prod-sheet','story-sheet','cart-sheet','login-sheet'].forEach(s=>document.getElementById(s).classList.remove('open'));
+  document.getElementById('veil').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+/* ══════════ TOAST ══════════ */
+function toast(html){
+  const c=document.getElementById('toasts'),el=document.createElement('div');
+  el.className='toast';el.innerHTML=html;c.appendChild(el);
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),350);},3000);
+}
+
+/* ══════════ SCROLL TOP ══════════ */
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
+
+/* ══════════ KEYBOARD ESC ══════════ */
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll();});
+
+/* ══════════ INIT ══════════ */
+renderStoryStrip();
+renderArtists();
+renderGrid(PRODUCTS);
+</script>
+</body>
+</html>

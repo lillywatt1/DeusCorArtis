@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>ArtLore • Stories & Sacred Art</title>
+    <title>DeusCorArtis • Divine Art for the Soul</title>
     <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- TailwindCSS CDN -->
@@ -11,7 +11,7 @@
     <style>
         /* custom smooth scroll & transitions */
         html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif; background-color: #0a0a0a; color: #f5f2eb; }
+        body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;  color: #f5f2eb; }
         .heading-font { font-family: 'Playfair Display', 'Times New Roman', serif; letter-spacing: -0.02em; }
         @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700&display=swap');
         .story-card-hover:hover .story-read-more { color: #fbbf24; border-color: #fbbf24; }
@@ -20,9 +20,19 @@
         ::-webkit-scrollbar-track { background: #1a1a1a; }
         ::-webkit-scrollbar-thumb { background: #b8860b; border-radius: 6px; }
         .glow-text { text-shadow: 0 0 8px rgba(251,191,36,0.3); }
+        #ibaoo{
+            background-image:url(../ansofra/public/assets/mik.jpeg);
+            background-size: cover;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: brightness(0.5) blur(2px) contrast(1.1);
+        }
     </style>
 </head>
 <body class="bg-black text-white">
+    <div id="ibaoo"></div>
 
     <!-- NAVIGATION (polished + story focus + shop integration) -->
     <nav class="bg-black/90 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
@@ -30,7 +40,7 @@
             <!-- Logo + brand -->
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 bg-gradient-to-tr from-amber-400 to-yellow-600 rounded-xl flex items-center justify-center text-xl shadow-md">✧</div>
-                <h1 class="heading-font text-2xl sm:text-3xl tracking-tight font-semibold">ArtLore<span class="text-amber-400">.</span></h1>
+                <h1 class="heading-font text-2xl sm:text-3xl tracking-tight font-semibold">DeusCorArtis</h1>
             </div>
 
             <!-- desktop menu: storytelling + shop equally prominent -->
@@ -175,7 +185,32 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="border-t border-white/10 py-12 bg-black text-white/60 text-sm"><div class="max-w-7xl mx-auto px-6 flex flex-wrap justify-between gap-8"><div><span class="heading-font text-2xl text-white">ArtLore<span class="text-amber-400">.</span></span><p class="mt-2 max-w-xs">Abuja • Lagos • Global<br>Where every artwork tells a legend.</p></div><div><h5 class="uppercase font-semibold text-white/80">Discover</h5><ul class="mt-3 space-y-2"><li><a href="#stories" onclick="smoothScroll('stories')" class="hover:text-amber-400">Stories</a></li><li><a href="#shop" onclick="smoothScroll('shop')" class="hover:text-amber-400">Artworks</a></li><li><a href="#artists" onclick="smoothScroll('artists')" class="hover:text-amber-400">Artists</a></li></ul></div><div><h5 class="uppercase font-semibold text-white/80">Connect</h5><ul class="mt-3 space-y-2"><li><i class="fab fa-instagram mr-2"></i> @artlore_ng</li><li><i class="far fa-envelope mr-2"></i> hello@artlore.com</li></ul></div><div class="text-xs opacity-50">© 2026 ArtLore — Stories & Sacred Art</div></div></footer>
+    <footer class="border-t border-white/10 py-12 bg-black text-white/60 text-sm">
+        <div class="max-w-7xl mx-auto px-6 flex flex-wrap justify-between gap-8">
+            <div>
+                <span class="heading-font text-2xl text-white">DeusCorArtis<span class="text-amber-400">.</span></span>
+                <p class="mt-2 max-w-xs">Abuja • Lagos • Global<br>Where every artwork tells a legend.</p>
+            </div>
+            <div>
+                <h5 class="uppercase font-semibold text-white/80">Discover</h5>
+                <ul class="mt-3 space-y-2">
+                    <li><a href="#stories" onclick="smoothScroll('stories')" class="hover:text-amber-400">Stories</a></li>
+                    <li><a href="#shop" onclick="smoothScroll('shop')" class="hover:text-amber-400">Artworks</a></li>
+                    <li><a href="#artists" onclick="smoothScroll('artists')" class="hover:text-amber-400">Artists</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="uppercase font-semibold text-white/80">Connect</h5>
+                <ul class="mt-3 space-y-2">
+                    <li><i class="fab fa-instagram mr-2"></i> @artlore_ng</li>
+                    <li><i class="far fa-envelope mr-2"></i> hello@artlore.com</li>
+                </ul>
+            </div>
+            <div class="text-xs opacity-50">
+                © 2026 DeusCorArtis — Stories & Sacred Art
+            </div>
+        </div>
+    </footer>
 
     <!-- MODALS: product quickview, story modal, login, cart drawer -->
     <div id="productModal" class="hidden fixed inset-0 bg-black/90 z-[200] items-center justify-center p-4" onclick="if(event.target===this) closeProductModal()">
@@ -222,7 +257,7 @@
     </div>
     <div id="loginModal" class="hidden fixed inset-0 bg-black/80 z-[400] items-center justify-center" onclick="if(event.target===this) hideLoginModal()">
         <div class="bg-zinc-900 rounded-3xl p-8 max-w-md w-full">
-            <h3 class="heading-font text-3xl mb-3">Welcome to ArtLore</h3>
+            <h3 class="heading-font text-3xl mb-3">Welcome to DeusCorArtis</h3>
             <p class="text-white/60 text-sm mb-5">Sign in to collect stories & art</p>
             <input id="demoEmail" type="email" placeholder="Email address" class="w-full bg-black border border-white/20 rounded-xl px-5 py-3 mb-4">
             <input id="demoPass" type="password" placeholder="Password" class="w-full bg-black border border-white/20 rounded-xl px-5 py-3 mb-6">
