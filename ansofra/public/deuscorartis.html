@@ -46,6 +46,7 @@
     <button class="pill" data-cat="digital" onclick="setCategory(this,'digital')">Digital</button>
     <button class="pill" data-cat="sculpture" onclick="setCategory(this,'sculpture')">Sculpture</button>
     <button class="pill" data-cat="gallery" onclick="openGallery()" style="background:var(--gold-bg);border-color:var(--gold);color:var(--gold)"><i class="fa-solid fa-images"></i> Gallery</button>
+    <button class="pill" data-cat="artskill" onclick="openArtSkill()" style="background:#eef4ff;border-color:#3b6fd4;color:#3b6fd4"><i class="fa-solid fa-pen-ruler"></i> ArtSkill</button>
   </div>
 
   <!-- ─── MAIN CONTENT ─── -->
@@ -102,6 +103,10 @@
     <div class="bn-item" onclick="openGallery()">
       <i class="fa-solid fa-images"></i>
       <span>Gallery</span>
+    </div>
+    <div class="bn-item" onclick="openArtSkill()">
+      <i class="fa-solid fa-pen-ruler"></i>
+      <span>ArtSkill</span>
     </div>
     <div class="bn-item" onclick="openCart()">
       <i class="fa-solid fa-bag-shopping"></i>
@@ -261,9 +266,58 @@
   </div>
 </div>
 
+
+<!-- ─── ARTSKILL MODAL ─── -->
+<div class="artskill-modal" id="artskill-modal">
+  <div class="as-header">
+    <div class="as-header-title">
+      <i class="fa-solid fa-pen-ruler"></i> ArtSkill
+    </div>
+    <button class="as-x" onclick="closeArtSkill()">✕</button>
+  </div>
+  <!-- ArtSkill hero strip -->
+  <div style="background:linear-gradient(120deg,#0d1117 0%,#1a2540 100%);padding:14px 16px 16px;border-bottom:1px solid rgba(59,111,212,.25);flex-shrink:0">
+    <p style="font-size:12px;color:#6e7a8a;line-height:1.6;margin:0">
+      <i class="fa-solid fa-star" style="color:#3b6fd4;margin-right:5px"></i>
+      Learn biro art from master artists — study our <strong style="color:#a8c4f8">technique PDFs</strong> and watch <strong style="color:#a8c4f8">step-by-step video tutorials</strong>.
+    </p>
+  </div>
+  <div class="as-tabs">
+    <div class="as-tab active" id="astab-pdf" onclick="switchAsTab('pdf')">
+      <i class="fa-solid fa-file-pdf"></i> Biro PDFs
+    </div>
+    <div class="as-tab" id="astab-video" onclick="switchAsTab('video')">
+      <i class="fa-solid fa-circle-play"></i> Videos
+    </div>
+  </div>
+  <div class="as-body" id="as-body"></div>
+</div>
+
+<!-- ─── PDF VIEWER OVERLAY ─── -->
+<div class="pdf-viewer" id="pdf-viewer">
+  <div class="pdf-viewer-top">
+    <div class="pdf-viewer-title" id="pv-title">Document</div>
+    <button class="as-x" onclick="closePdfViewer()">✕</button>
+  </div>
+  <iframe class="pdf-viewer-frame" id="pv-frame" src="" title="PDF Viewer" allowfullscreen></iframe>
+  <div class="pdf-viewer-note">
+    <i class="fa-solid fa-info-circle" style="margin-right:5px;color:#3b6fd4"></i>
+    Use pinch-to-zoom to read · Scroll to navigate pages
+  </div>
+</div>
+
+<!-- ─── VIDEO PLAYER OVERLAY ─── -->
+<div class="video-player" id="video-player">
+  <div class="video-player-top">
+    <div class="video-player-title" id="vp-title">Video</div>
+    <button class="vp-x" onclick="closeVideoPlayer()">✕</button>
+  </div>
+  <div id="vp-content" style="width:100%"></div>
+  <div class="video-player-sub" id="vp-sub"></div>
+</div>
+
 <!-- Toast container -->
 <div id="toasts"></div>
-
 <script src="../ansofra/public/js/duscorart.js"></script>
 </body>
 </html>

@@ -432,14 +432,17 @@ function lbNav(dir){
 })();
 // Keyboard nav in lightbox
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(document.getElementById('video-player').classList.contains('open')){ closeVideoPlayer(); }
+    else if(document.getElementById('pdf-viewer').classList.contains('open')){ closePdfViewer(); }
+    else if(document.getElementById('artskill-modal').classList.contains('open')){ closeArtSkill(); }
+    else if(document.getElementById('lightbox').classList.contains('open')){ closeLightbox(); }
+    else if(document.getElementById('gallery-modal').classList.contains('open')){ closeGallery(); }
+    else { closeAll(); }
+  }
   if(document.getElementById('lightbox').classList.contains('open')){
     if(e.key==='ArrowLeft') lbNav(-1);
     if(e.key==='ArrowRight') lbNav(1);
-    if(e.key==='Escape') closeLightbox();
-  } else if(document.getElementById('gallery-modal').classList.contains('open')){
-    if(e.key==='Escape') closeGallery();
-  } else {
-    if(e.key==='Escape') closeAll();
   }
 });
 
@@ -455,3 +458,195 @@ function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
 renderStoryStrip();
 renderArtists();
 renderGrid(PRODUCTS);
+
+/* ══════════ ARTSKILL DATA ══════════ */
+const AS_PDFS = [
+  {
+    id:'p1', tag:'Biro Fundamentals', title:'The Art of Biro — Volume I',
+    meta:'32 pages · Techniques & Exercises',
+    thumb:'https://picsum.photos/id/1011/200/260',
+    // Using a real embeddable PDF for demo — Mozilla PDF.js hosted viewer
+    //url:'https://mozilla.github.io/pdf.js/web/viewer.html?file=https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf',
+    //directUrl:'https://www.africau.edu/images/default/sample.pdf'
+  },
+  {
+    id:'p2', tag:'Biro Portraiture', title:'Drawing Faces with Ballpoint',
+    meta:'48 pages · Step-by-step guide',
+    thumb:'https://picsum.photos/id/1012/200/260',
+    //url:'https://mozilla.github.io/pdf.js/web/viewer.html?file=https://www.africau.edu/images/default/sample.pdf',
+    //directUrl:'https://www.africau.edu/images/default/sample.pdf'
+  },
+  {
+    id:'p3', tag:'Cross-Hatching', title:'Mastering Biro Texture & Tone',
+    meta:'28 pages · Advanced shading',
+    thumb:'https://picsum.photos/id/1074/200/260',
+    //url:'https://mozilla.github.io/pdf.js/web/viewer.html?file=https://www.africau.edu/images/default/sample.pdf',
+    //directUrl:'https://www.africau.edu/images/default/sample.pdf'
+  },
+  {
+    id:'p4', tag:'Composition', title:'Sacred Geometry in Biro Art',
+    meta:'56 pages · Patterns & sacred forms',
+    thumb:'https://picsum.photos/id/1050/200/260',
+    //url:'https://mozilla.github.io/pdf.js/web/viewer.html?file=https://www.africau.edu/images/default/sample.pdf',
+   // directUrl:'https://www.africau.edu/images/default/sample.pdf'
+  },
+  {
+    id:'p5', tag:'Sketchbook Series', title:'90-Day Biro Practice Journal',
+    meta:'72 pages · Daily prompts & references',
+    thumb:'https://picsum.photos/id/1025/200/260',
+    //url:'https://mozilla.github.io/pdf.js/web/viewer.html?file=https://www.africau.edu/images/default/sample.pdf',
+    //directUrl:'https://www.africau.edu/images/default/sample.pdf'
+  },
+];
+
+const AS_VIDEOS = [
+  {
+    id:'v1', tag:'Biro Tutorial', title:'Drawing Hair with Ballpoint Pen',
+    meta:'Adebayo Olumide · 18 min',
+    duration:'18:24',
+    thumb:'https://picsum.photos/id/1015/640/360',
+    // Embeddable YouTube demo (Big Buck Bunny trailer - copyright free)
+    youtubeId:'aqz-KE-bpKQ'
+  },
+  {
+    id:'v2', tag:'Masterclass', title:'Biro Stippling: Dots That Tell Stories',
+    meta:'Fatima Nkemdilim · 24 min',
+    duration:'24:07',
+    thumb:'https://picsum.photos/id/1012/640/360',
+    youtubeId:'aqz-KE-bpKQ'
+  },
+  {
+    id:'v3', tag:'Speed Art', title:'Portrait in Biro — Full Process',
+    meta:'Chinedu Eze · 12 min',
+    duration:'12:55',
+    thumb:'https://picsum.photos/id/1013/640/360',
+    youtubeId:'aqz-KE-bpKQ'
+  },
+  {
+    id:'v4', tag:'Biro Basics', title:'Line Weight Control for Beginners',
+    meta:'Zainab Musa · 9 min',
+    duration:'9:40',
+    thumb:'https://picsum.photos/id/1067/640/360',
+    youtubeId:'aqz-KE-bpKQ'
+  },
+  {
+    id:'v5', tag:'Digital + Biro', title:'Combining Biro Scans with Digital Colour',
+    meta:'Chinedu Eze · 31 min',
+    duration:'31:12',
+    thumb:'https://picsum.photos/id/201/640/360',
+    youtubeId:'aqz-KE-bpKQ'
+  },
+  {
+    id:'v6', tag:'Live Session', title:'Biro Landscape — Full Live Drawing',
+    meta:'Adebayo Olumide · 47 min',
+    duration:'47:38',
+    thumb:'https://picsum.photos/id/1039/640/360',
+    youtubeId:'aqz-KE-bpKQ'
+  },
+];
+
+let asTab = 'pdf';
+
+/* ══════════ ARTSKILL OPEN / CLOSE ══════════ */
+function openArtSkill(){
+  document.getElementById('artskill-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Highlight ArtSkill in bottom nav
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active','artskill-active'));
+  document.querySelectorAll('.bn-item')[3] && 
+    document.querySelectorAll('.bn-item')[4].classList.add('artskill-active');
+  renderAsContent();
+}
+function closeArtSkillAndReset(){
+  closeArtSkill();
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('artskill-active'));
+}
+function closeArtSkill(){
+  document.getElementById('artskill-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ══════════ TAB SWITCH ══════════ */
+function switchAsTab(tab){
+  asTab = tab;
+  document.getElementById('astab-pdf').classList.toggle('active', tab==='pdf');
+  document.getElementById('astab-video').classList.toggle('active', tab==='video');
+  renderAsContent();
+}
+
+/* ══════════ RENDER CONTENT ══════════ */
+function renderAsContent(){
+  const body = document.getElementById('as-body');
+  if(asTab === 'pdf'){
+    body.innerHTML = '<div class="pdf-grid">' + AS_PDFS.map((p,i) => `
+      <div class="pdf-card" style="animation:fadeUp .4s ${i*60}ms both">
+        <div class="pdf-card-thumb">
+          <img src="${p.thumb}" alt="${p.title}">
+          <div class="pdf-card-thumb-icon"><i class="fa-solid fa-file-pdf"></i></div>
+        </div>
+        <div class="pdf-card-body">
+          <div class="pdf-card-tag">${p.tag}</div>
+          <div class="pdf-card-title">${p.title}</div>
+          <div class="pdf-card-meta"><i class="fa-regular fa-file-lines" style="margin-right:4px"></i>${p.meta}</div>
+          <div class="pdf-card-actions">
+            <button class="pdf-btn-view" onclick="openPdfViewer('${p.id}')">
+              <i class="fa-solid fa-eye"></i> View PDF
+            </button>
+            <b class="pdf-btn-dl" href="${p.directUrl}" target="_blank" rel="noopener">
+              <i class="fa-solid fa-download"></i> Download
+            </b>
+          </div>
+        </div>
+      </div>`).join('') + '</div>';
+  } else {
+    body.innerHTML = '<div class="video-grid">' + AS_VIDEOS.map((v,i) => `
+      <div class="video-card" onclick="openVideoPlayer('${v.id}')" style="animation:fadeUp .4s ${i*60}ms both">
+        <div class="video-thumb">
+          <img src="${v.thumb}" alt="${v.title}" loading="lazy">
+          <div class="video-play-btn"><i class="fa-solid fa-play"></i></div>
+          <div class="video-duration">${v.duration}</div>
+        </div>
+        <div class="video-body">
+          <div class="video-tag">${v.tag}</div>
+          <div class="video-title">${v.title}</div>
+          <div class="video-meta"><i class="fa-regular fa-user" style="margin-right:4px"></i>${v.meta}</div>
+        </div>
+      </div>`).join('') + '</div>';
+  }
+}
+
+/* ══════════ PDF VIEWER ══════════ */
+function openPdfViewer(id){
+  const pdf = AS_PDFS.find(p=>p.id===id);
+  if(!pdf) return;
+  document.getElementById('pv-title').textContent = pdf.title;
+  document.getElementById('pv-frame').src = pdf.url;
+  document.getElementById('pdf-viewer').classList.add('open');
+}
+function closePdfViewer(){
+  document.getElementById('pdf-viewer').classList.remove('open');
+  // stop loading
+  document.getElementById('pv-frame').src = '';
+}
+
+/* ══════════ VIDEO PLAYER ══════════ */
+function openVideoPlayer(id){
+  const vid = AS_VIDEOS.find(v=>v.id===id);
+  if(!vid) return;
+  document.getElementById('vp-title').textContent = vid.title;
+  document.getElementById('vp-sub').textContent = vid.meta;
+  // Embed YouTube
+  document.getElementById('vp-content').innerHTML = `
+    <iframe 
+      src="https://www.youtube.com/embed/${vid.youtubeId}?autoplay=1&rel=0&modestbranding=1" 
+      title="${vid.title}"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      style="width:100%;aspect-ratio:16/9;border:none;">
+    </iframe>`;
+  document.getElementById('video-player').classList.add('open');
+}
+function closeVideoPlayer(){
+  document.getElementById('video-player').classList.remove('open');
+  document.getElementById('vp-content').innerHTML = '';
+}
